@@ -65,6 +65,9 @@ Vagrant.configure("2") do |config|
           end
  	  box.vm.provision "shell", inline: <<-SHELL
 	      yum install -y mdadm smartmontools hdparm gdisk
+	      mdadm --zero-superblock --force /dev/sd{b,c,d,e}
+	      wipefs --all --force /dev/sd{b,c,d,e}
+	      mdadm --create --verbose /dev/md0 -l 5 -n 4 /dev/sd{b,c,d,e}
   	  SHELL
 
       end
