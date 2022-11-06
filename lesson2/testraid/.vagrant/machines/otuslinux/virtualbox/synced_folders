@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/roman/OtusLinux2022/lesson2/testraid","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
