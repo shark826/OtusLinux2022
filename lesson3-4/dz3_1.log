@@ -1,0 +1,409 @@
+Script started on Mon 14 Nov 2022 06:58:11 PM UTC
+]0;vagrant@otuslinuxlvm:/[?1034h[root@otuslinuxlvm /]# pvcreate /dev/sdb
+  Physical volume "/dev/sdb" successfully created.
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# lsblk
+NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                       8:0    0   40G  0 disk 
+├─sda1                    8:1    0    1M  0 part 
+├─sda2                    8:2    0    1G  0 part /boot
+└─sda3                    8:3    0   39G  0 part 
+  ├─VolGroup00-LogVol00 253:0    0 37.5G  0 lvm  /
+  └─VolGroup00-LogVol01 253:1    0  1.5G  0 lvm  [SWAP]
+sdb                       8:16   0   10G  0 disk 
+sdc                       8:32   0    2G  0 disk 
+sdd                       8:48   0    1G  0 disk 
+sde                       8:64   0    1G  0 disk 
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# vgcreate vg_root /dev/sdb
+  Volume group "vg_root" successfully created
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# lvcreate -n lv_root -l +100%FREE /dev/vg_root
+  Logical volume "lv_root" created.
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# mkfs.xfs /dev/vg_root/lv_root
+meta-data=/dev/vg_root/lv_root   isize=512    agcount=4, agsize=655104 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=2620416, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# mount /dev/vg_root/lv_root /mnt
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+xfsdump: using file dump (drive_simple) strategy
+xfsdump: version 3.1.7 (dump format 3.0)
+xfsdump: level 0 dump of otuslinuxlvm:/
+xfsdump: dump date: Mon Nov 14 18:59:23 2022
+xfsdump: session id: cb6c2568-2447-4b1c-9674-118c5b8d2420
+xfsdump: session label: ""
+xfsrestore: using file dump (drive_simple) strategy
+xfsrestore: version 3.1.7 (dump format 3.0)
+xfsrestore: searching media for dump
+xfsdump: ino map phase 1: constructing initial dump list
+xfsdump: ino map phase 2: skipping (no pruning necessary)
+xfsdump: ino map phase 3: skipping (only one dump stream)
+xfsdump: ino map construction complete
+xfsdump: estimated dump size: 840081024 bytes
+xfsdump: creating dump session media file 0 (media 0, file 0)
+xfsdump: dumping ino map
+xfsdump: dumping directories
+xfsrestore: examining media file 0
+xfsrestore: dump description: 
+xfsrestore: hostname: otuslinuxlvm
+xfsrestore: mount point: /
+xfsrestore: volume: /dev/mapper/VolGroup00-LogVol00
+xfsrestore: session time: Mon Nov 14 18:59:23 2022
+xfsrestore: level: 0
+xfsrestore: session label: ""
+xfsrestore: media label: ""
+xfsrestore: file system id: b60e9498-0baa-4d9f-90aa-069048217fee
+xfsrestore: session id: cb6c2568-2447-4b1c-9674-118c5b8d2420
+xfsrestore: media id: 6f3fdfe8-451d-4ab7-8acb-3f859ecbdabd
+xfsrestore: searching media for directory dump
+xfsrestore: reading directories
+xfsdump: dumping non-directory files
+xfsrestore: 2698 directories and 23614 entries processed
+xfsrestore: directory post-processing
+xfsrestore: restoring non-directory files
+xfsdump: ending media file
+xfsdump: media file size 817186264 bytes
+xfsdump: dump size (non-dir files) : 804026056 bytes
+xfsdump: dump complete: 21 seconds elapsed
+xfsdump: Dump Status: SUCCESS
+xfsrestore: restore complete: 21 seconds elapsed
+xfsrestore: Restore Status: SUCCESS
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# ls -la /mnt
+total 12
+drwxr-xr-x. 18 root    root     256 Nov 14 18:59 [0m[38;5;27m.[0m
+dr-xr-xr-x. 18 root    root     256 Nov 14 18:58 [38;5;27m..[0m
+lrwxrwxrwx.  1 root    root       7 Nov 14 18:59 [38;5;51mbin[0m -> [38;5;27musr/bin[0m
+drwxr-xr-x.  2 root    root       6 May 12  2018 [38;5;27mboot[0m
+drwxr-xr-x.  2 root    root       6 May 12  2018 [38;5;27mdev[0m
+-rw-r--r--.  1 root    root       0 Nov 14 18:58 dz3_1.log
+drwxr-xr-x. 79 root    root    8192 Nov 14 18:47 [38;5;27metc[0m
+drwxr-xr-x.  3 root    root      21 May 12  2018 [38;5;27mhome[0m
+lrwxrwxrwx.  1 root    root       7 Nov 14 18:59 [38;5;51mlib[0m -> [38;5;27musr/lib[0m
+lrwxrwxrwx.  1 root    root       9 Nov 14 18:59 [38;5;51mlib64[0m -> [38;5;27musr/lib64[0m
+drwxr-xr-x.  2 root    root       6 Apr 11  2018 [38;5;27mmedia[0m
+drwxr-xr-x.  2 root    root       6 Apr 11  2018 [38;5;27mmnt[0m
+drwxr-xr-x.  2 root    root       6 Apr 11  2018 [38;5;27mopt[0m
+drwxr-xr-x.  2 root    root       6 May 12  2018 [38;5;27mproc[0m
+dr-xr-x---.  3 root    root     149 Nov 14 18:47 [38;5;27mroot[0m
+drwxr-xr-x.  2 root    root       6 May 12  2018 [38;5;27mrun[0m
+lrwxrwxrwx.  1 root    root       8 Nov 14 18:59 [38;5;51msbin[0m -> [38;5;27musr/sbin[0m
+drwxr-xr-x.  2 root    root       6 Apr 11  2018 [38;5;27msrv[0m
+drwxr-xr-x.  2 root    root       6 May 12  2018 [38;5;27msys[0m
+drwxrwxrwt.  8 root    root     256 Nov 14 18:49 [48;5;10;38;5;16mtmp[0m
+drwxr-xr-x. 13 root    root     155 May 12  2018 [38;5;27musr[0m
+drwxr-xr-x.  2 vagrant vagrant   81 Nov 14 18:45 [38;5;27mvagrant[0m
+drwxr-xr-x. 18 root    root     254 Nov 14 18:46 [38;5;27mvar[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ke
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# chroot /mnt/
+]0;vagrant@otuslinuxlvm:/[?1034h[root@otuslinuxlvm /]# ls /
+[0m[38;5;51mbin[0m   [38;5;27mdev[0m        [38;5;27metc[0m   [38;5;51mlib[0m    [38;5;27mmedia[0m  [38;5;27mopt[0m   [38;5;27mroot[0m  [38;5;51msbin[0m  [38;5;27msys[0m  [38;5;27musr[0m      [38;5;27mvar[0m
+[38;5;27mboot[0m  dz3_1.log  [38;5;27mhome[0m  [38;5;51mlib64[0m  [38;5;27mmnt[0m    [38;5;27mproc[0m  [38;5;27mrun[0m   [38;5;27msrv[0m   [48;5;10;38;5;16mtmp[0m  [38;5;27mvagrant[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# ls / -la
+total 16
+drwxr-xr-x.  18 root    root     256 Nov 14 18:59 [0m[38;5;27m.[0m
+drwxr-xr-x.  18 root    root     256 Nov 14 18:59 [38;5;27m..[0m
+lrwxrwxrwx.   1 root    root       7 Nov 14 18:59 [38;5;51mbin[0m -> [38;5;27musr/bin[0m
+dr-xr-xr-x.   5 root    root    4096 May 12  2018 [38;5;27mboot[0m
+drwxr-xr-x.  19 root    root    3160 Nov 14 18:58 [38;5;27mdev[0m
+-rw-r--r--.   1 root    root       0 Nov 14 18:58 dz3_1.log
+drwxr-xr-x.  79 root    root    8192 Nov 14 18:47 [38;5;27metc[0m
+drwxr-xr-x.   3 root    root      21 May 12  2018 [38;5;27mhome[0m
+lrwxrwxrwx.   1 root    root       7 Nov 14 18:59 [38;5;51mlib[0m -> [38;5;27musr/lib[0m
+lrwxrwxrwx.   1 root    root       9 Nov 14 18:59 [38;5;51mlib64[0m -> [38;5;27musr/lib64[0m
+drwxr-xr-x.   2 root    root       6 Apr 11  2018 [38;5;27mmedia[0m
+drwxr-xr-x.   2 root    root       6 Apr 11  2018 [38;5;27mmnt[0m
+drwxr-xr-x.   2 root    root       6 Apr 11  2018 [38;5;27mopt[0m
+dr-xr-xr-x. 179 root    root       0 Nov 14 18:46 [38;5;27mproc[0m
+dr-xr-x---.   3 root    root     149 Nov 14 18:47 [38;5;27mroot[0m
+drwxr-xr-x.  26 root    root     860 Nov 14 18:47 [38;5;27mrun[0m
+lrwxrwxrwx.   1 root    root       8 Nov 14 18:59 [38;5;51msbin[0m -> [38;5;27musr/sbin[0m
+drwxr-xr-x.   2 root    root       6 Apr 11  2018 [38;5;27msrv[0m
+dr-xr-xr-x.  13 root    root       0 Nov 14 18:46 [38;5;27msys[0m
+drwxrwxrwt.   8 root    root     256 Nov 14 18:49 [48;5;10;38;5;16mtmp[0m
+drwxr-xr-x.  13 root    root     155 May 12  2018 [38;5;27musr[0m
+drwxr-xr-x.   2 vagrant vagrant   81 Nov 14 18:45 [38;5;27mvagrant[0m
+drwxr-xr-x.  18 root    root     254 Nov 14 18:46 [38;5;27mvar[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# ls / -lab -lao -lao -lat -la/ -lag -lar -laub -la
+total 8
+drwxr-xr-x. 2 root root   27 May 12  2018 [0m[38;5;27m.[0m
+dr-xr-xr-x. 5 root root 4096 May 12  2018 [38;5;27m..[0m
+-rw-r--r--. 1 root root 1350 Nov 15  2011 [38;5;9msplash.xpm.gz[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# ls /boot/grub -la2 -la
+total 28
+drwx------. 5 root root   97 May 12  2018 [0m[38;5;27m.[0m
+dr-xr-xr-x. 5 root root 4096 May 12  2018 [38;5;27m..[0m
+-rw-r--r--. 1 root root   64 May 12  2018 device.map
+drwxr-xr-x. 2 root root   25 May 12  2018 [38;5;27mfonts[0m
+-rw-r--r--. 1 root root 3607 May 12  2018 grub.cfg
+-rw-r--r--. 1 root root 1024 May 12  2018 grubenv
+drwxr-xr-x. 2 root root 8192 May 12  2018 [38;5;27mi386-pc[0m
+drwxr-xr-x. 2 root root    6 May 12  2018 [38;5;27mlocale[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# grub2-mkconfig -o /boot/grub2/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-862.2.3.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-862.2.3.el7.x86_64.img
+done
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# grub2-mkconfig -o /boot/grub2/grub.cfg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pls /boot/grub2 -la
+total 28
+drwx------. 5 root root   97 Nov 14 19:02 [0m[38;5;27m.[0m
+dr-xr-xr-x. 5 root root 4096 May 12  2018 [38;5;27m..[0m
+-rw-r--r--. 1 root root   64 May 12  2018 device.map
+drwxr-xr-x. 2 root root   25 May 12  2018 [38;5;27mfonts[0m
+-rw-r--r--. 1 root root 3658 Nov 14 19:02 grub.cfg
+-rw-r--r--. 1 root root 1024 May 12  2018 grubenv
+drwxr-xr-x. 2 root root 8192 May 12  2018 [38;5;27mi386-pc[0m
+drwxr-xr-x. 2 root root    6 May 12  2018 [38;5;27mlocale[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/i nitramfs-//g;
+> s/.img//g"` --force; done[1P[1@'cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[K> cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[C[Cs/.img//g"' --force; done[K[C[Ccd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;[1P[1@'[1P[1@'[1P[1@'[C[Cls /boot/grub2 -la[K[C[Cgrub2-mkconfig -o /boot/grub2/grub.cfg[C[C[20Pls /boot/grub2 -la[C[Cgrub2-mkconfig -o /boot/grub2/grub.cfg[C[C[20Pls /boot/grub2 -la[C[Ccd /boot ; for i in 'ls initramfs-*img'; do dracut -v $i 'echo $i|sed "s/initramfs-//g;[C[Cs/.img//g"' --force; done[K[C[Ccd /boot ; for i in 'ls initramfs-*img'; do dracut -v $i 'echo $i|sed "s/initramfs-//g;[C[Cs/.img//g"' --force; done[K
+> 
+> ^C
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# cd /boot ; for i in 'ls initramfs-*img'; do dracut -v $i 'echo $i|sed "s/initramfs-//g;
+> s/.img//g"' --force; done
+
+Unknown arguments: echo $i|sed "s/initramfs-//g;
+s/.img//g"
+
+Usage: /usr/bin/dracut [OPTION]... [<initramfs> [<kernel-version>]]
+
+Version: 033-535.el7
+
+Creates initial ramdisk images for preloading modules
+
+  -h, --help  Display all options
+
+If a [LIST] has multiple arguments, then you have to put these in quotes.
+
+For example:
+
+    # dracut --add-drivers "module1 module2"  ...
+
+]0;vagrant@otuslinuxlvm:/boot[root@otuslinuxlvm boot]# cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;
+> s/.img//g"` --force; done
+Executing: /usr/bin/dracut -v initramfs-3.10.0-862.2.3.el7.x86_64.img 3.10.0-862.2.3.el7.x86_64 --force
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+*** Including module: bash ***
+*** Including module: nss-softokn ***
+*** Including module: i18n ***
+*** Including module: drm ***
+*** Including module: plymouth ***
+*** Including module: dm ***
+Skipping udev rule: 64-device-mapper.rules
+Skipping udev rule: 60-persistent-storage-dm.rules
+Skipping udev rule: 55-dm.rules
+*** Including module: kernel-modules ***
+Omitting driver floppy
+*** Including module: lvm ***
+Skipping udev rule: 64-device-mapper.rules
+Skipping udev rule: 56-lvm.rules
+Skipping udev rule: 60-persistent-storage-lvm.rules
+*** Including module: qemu ***
+*** Including module: resume ***
+*** Including module: rootfs-block ***
+*** Including module: terminfo ***
+*** Including module: udev-rules ***
+Skipping udev rule: 40-redhat-cpu-hotplug.rules
+Skipping udev rule: 91-permissions.rules
+*** Including module: biosdevname ***
+*** Including module: systemd ***
+*** Including module: usrmount ***
+*** Including module: base ***
+*** Including module: fs-lib ***
+*** Including module: shutdown ***
+*** Including modules done ***
+*** Installing kernel module dependencies and firmware ***
+*** Installing kernel module dependencies and firmware done ***
+*** Resolving executable dependencies ***
+*** Resolving executable dependencies done***
+*** Hardlinking files ***
+*** Hardlinking files done ***
+*** Stripping files ***
+*** Stripping files done ***
+*** Generating early-microcode cpio image contents ***
+*** No early-microcode cpio image needed ***
+*** Store current command line parameters ***
+*** Creating image file ***
+*** Creating image file done ***
+*** Creating initramfs image file '/boot/initramfs-3.10.0-862.2.3.el7.x86_64.img' done ***
+]0;vagrant@otuslinuxlvm:/boot[root@otuslinuxlvm boot]# vi /boot/grub2/grub.cfg
+[?1049h[?1h=[1;29r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[29;1H"/boot/grub2/grub.cfg" 127L, 3658C[1;1H#
+# DO NOT EDIT THIS FILE
+#
+# It is automatically generated by grub2-mkconfig using templates
+# from /etc/grub.d and settings from /etc/default/grub
+#
+
+### BEGIN /etc/grub.d/00_header ###
+set pager=1
+
+if [ -s $prefix/grubenv ]; then
+  load_env
+fi
+if [ "${next_entry}" ] ; then
+   set default="${next_entry}"
+   set next_entry=
+   save_env next_entry
+   set boot_once=true
+else
+   set default="${saved_entry}"
+fi
+
+if [ x"${feature_menuentry_id}" = xy ]; then
+  menuentry_id_option="--id"
+else
+  menuentry_id_option=""
+fi[1;1H[?12l[?25h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[?25l[1;28r[28;1H
+[1;29r[28;1Hexport menuentry_id_option[29;1H[K[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hif [ "${prev_saved_entry}" ]; then[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hset saved_entry="${prev_saved_entry}"[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hsave_env saved_entry[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hset prev_saved_entry=[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hsave_env prev_saved_entry[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hset boot_once=true[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hfi[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hfunction savedefault {[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hif [ -z "${boot_once}" ]; then[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hsaved_entry="${chosen}"[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hsave_env saved_entry[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hfi[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H}[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hfunction load_video {[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hif [ x$feature_all_video_module = xy ]; then[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod all_video[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Helse[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod efi_gop[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod efi_uga[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod ieee1275_fb[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod vbe[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod vga[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod video_bochs[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hinsmod video_cirrus[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hfi[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H}[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hterminal_output console[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hif [ x$feature_timeout_style = xy ] ; then[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hset timeout_style=menu[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hset timeout=1[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H# Fallback normal timeout code in case the timeout_style feature is[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H# unavailable.[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Helse[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hset timeout=1[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hfi[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### END /etc/grub.d/00_header ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### BEGIN /etc/grub.d/00_tuned ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hset tuned_params=""[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hset tuned_initrd=""[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### END /etc/grub.d/00_tuned ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### BEGIN /etc/grub.d/01_users ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hif [ -f ${prefix}/user.cfg ]; then[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hsource ${prefix}/user.cfg[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hif [ -n "${GRUB2_PASSWORD}" ]; then[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hset superusers="root"[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hexport superusers[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;5Hpassword_pbkdf2 root ${GRUB2_PASSWORD}[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;3Hfi[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1Hfi[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### END /etc/grub.d/01_users ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### BEGIN /etc/grub.d/10_linux ###[?12l[?25h[?25l[1;28r[1;1H[2M[1;29r[27;1Hmenuentry 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-862.2.3.el7.x86_66[28;1H4-advanced-b5db6000-d82b-4dc6-a915-37ca2eb0dd04' {[27;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hload_video[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hset gfxpayload=keep[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hinsmod gzio[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hinsmod part_msdos[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hinsmod xfs[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hset root='hd0,msdos2'[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hif [ x$feature_platform_search_hint = xy ]; then[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;11Hsearch --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos2 --hint-efi=hd0,msdos2 --hint-baremetal=ahci0,msdos2  570897ca-e759-4c81-90cf-389da6eee4cc[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Helse[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;11Hsearch --no-floppy --fs-uuid --set=root 570897ca-e759-4c81-90cf-389da6eee4cc[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hfi[?12l[?25h[?25l[1;28r[1;1H[2M[1;29r[27;9Hlinux16 /vmlinuz-3.10.0-862.2.3.el7.x86_64 root=/dev/mapper/vg_root-lv_root ro no_timer_check console=tty0 console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkerr[28;1Hnel=auto rd.lvm.lv=VolGroup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[27;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;9Hinitrd16 /initramfs-3.10.0-862.2.3.el7.x86_64.img[28;8H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H}[?12l[?25h[27;8H[25;8H[27;8H
+[?25l[1;28r[28;1H
+[1;29r[28;1Hif [ "x$default" = 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' ]; then default='Advanced options for CentOS Linux>CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)'; fi;[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### END /etc/grub.d/10_linux ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### BEGIN /etc/grub.d/20_linux_xen ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### END /etc/grub.d/20_linux_xen ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### BEGIN /etc/grub.d/20_ppc_terminfo ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### END /etc/grub.d/20_ppc_terminfo ###[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H[?12l[?25h[?25l[1;28r[28;1H
+[1;29r[28;1H### BEGIN /etc/grub.d/30_os-prober ###[?12l[?25h[27;1H[26;1H[25;1H[24;1H[23;1H[22;1H[21;1H[20;1H[19;1H[18;1H[17;8H[15;8H[17;8H initrd16 /initram[15;26H[17;26H[15;26H[16;80H[?25l[29;1H[1m-- INSERT --[16;21H[?12l[?25h[?25l[molGroup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25llGroup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25lGroup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25lroup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25loup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25lup00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25lp00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25l00/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25l0/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25l/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;20H[?12l[?25h[?25lv/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;21H[?12l[?25h[?25lg/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;22H[?12l[?25h[?25l_/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;23H[?12l[?25h[?25lr/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;24H[?12l[?25h[?25lo/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;25H[?12l[?25h[?25lo/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;26H[?12l[?25h[?25lt/LogVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;27H[?12l[?25h/[?25logVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25lgVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25lVol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25lol00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25ll00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25l00 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25l0 rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25l rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet [16;28H[?12l[?25h[?25ll rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;29H[?12l[?25h[?25lv rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;30H[?12l[?25h[?25l_ rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;31H[?12l[?25h[?25lr rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;32H[?12l[?25h[?25lo rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;33H[?12l[?25h[?25lo rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;34H[?12l[?25h[?25lt rd.lvm.lv=VolGroup00/LogVol01 rhgb quiet[16;35H[?12l[?25h[29;1H[K[16;34H[?25l[?12l[?25h[?25l[29;1H:[?12l[?25hwq[?25l"grub2/grub.cfg" 127L, 3654C written
+[?1l>[?12l[?25h[?1049l]0;vagrant@otuslinuxlvm:/boot[root@otuslinuxlvm boot]# exit
+exit
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# ll -a
+total 40
+dr-xr-xr-x.  18 root    root      256 Nov 14 18:58 [0m[38;5;27m.[0m
+dr-xr-xr-x.  18 root    root      256 Nov 14 18:58 [38;5;27m..[0m
+lrwxrwxrwx.   1 root    root        7 May 12  2018 [38;5;51mbin[0m -> [38;5;27musr/bin[0m
+dr-xr-xr-x.   5 root    root     4096 Nov 14 19:05 [38;5;27mboot[0m
+drwxr-xr-x.  19 root    root     3160 Nov 14 18:58 [38;5;27mdev[0m
+-rw-r--r--.   1 root    root    24576 Nov 14 19:08 dz3_1.log
+drwxr-xr-x.  79 root    root     8192 Nov 14 18:47 [38;5;27metc[0m
+drwxr-xr-x.   3 root    root       21 May 12  2018 [38;5;27mhome[0m
+lrwxrwxrwx.   1 root    root        7 May 12  2018 [38;5;51mlib[0m -> [38;5;27musr/lib[0m
+lrwxrwxrwx.   1 root    root        9 May 12  2018 [38;5;51mlib64[0m -> [38;5;27musr/lib64[0m
+drwxr-xr-x.   2 root    root        6 Apr 11  2018 [38;5;27mmedia[0m
+drwxr-xr-x.  18 root    root      256 Nov 14 18:59 [38;5;27mmnt[0m
+drwxr-xr-x.   2 root    root        6 Apr 11  2018 [38;5;27mopt[0m
+dr-xr-xr-x. 178 root    root        0 Nov 14 18:46 [38;5;27mproc[0m
+dr-xr-x---.   3 root    root      149 Nov 14 18:47 [38;5;27mroot[0m
+drwxr-xr-x.  27 root    root      880 Nov 14 19:02 [38;5;27mrun[0m
+lrwxrwxrwx.   1 root    root        8 May 12  2018 [38;5;51msbin[0m -> [38;5;27musr/sbin[0m
+drwxr-xr-x.   2 root    root        6 Apr 11  2018 [38;5;27msrv[0m
+dr-xr-xr-x.  13 root    root        0 Nov 14 18:46 [38;5;27msys[0m
+drwxrwxrwt.   8 root    root      193 Nov 14 18:49 [48;5;10;38;5;16mtmp[0m
+drwxr-xr-x.  13 root    root      155 May 12  2018 [38;5;27musr[0m
+drwxr-xr-x.   2 vagrant vagrant    81 Nov 14 18:45 [38;5;27mvagrant[0m
+drwxr-xr-x.  18 root    root      254 Nov 14 18:46 [38;5;27mvar[0m
+]0;vagrant@otuslinuxlvm:/[root@otuslinuxlvm /]# scp dz3_1.log [K[K[K[K[K[K[K[K[K[K[K[K[K[Kip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 s

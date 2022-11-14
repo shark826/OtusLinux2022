@@ -1,0 +1,60 @@
+Script started on Mon 14 Nov 2022 07:37:20 PM UTC
+]0;vagrant@otuslinuxlvm:/home/vagrant[?1034h[root@otuslinuxlvm vagrant]# lexitcho "`blkid | grep var: | awk '{print $2}'` /var ext4 defaults 0 0" >> /etc/fstab[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cxit[Kl[Ksblk
+NAME                     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                        8:0    0   40G  0 disk 
+├─sda1                     8:1    0    1M  0 part 
+├─sda2                     8:2    0    1G  0 part /boot
+└─sda3                     8:3    0   39G  0 part 
+  ├─VolGroup00-LogVol00  253:0    0    8G  0 lvm  /
+  └─VolGroup00-LogVol01  253:1    0  1.5G  0 lvm  [SWAP]
+sdb                        8:16   0   10G  0 disk 
+└─vg_root-lv_root        253:2    0   10G  0 lvm  
+sdc                        8:32   0    2G  0 disk 
+├─vg_var-lv_var_rmeta_0  253:3    0    4M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rimage_0 253:4    0  952M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sdd                        8:48   0    1G  0 disk 
+├─vg_var-lv_var_rmeta_1  253:5    0    4M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rimage_1 253:6    0  952M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sde                        8:64   0    1G  0 disk 
+]0;vagrant@otuslinuxlvm:/home/vagrant[root@otuslinuxlvm vagrant]# df -Th
+Filesystem                      Type      Size  Used Avail Use% Mounted on
+/dev/mapper/VolGroup00-LogVol00 xfs       8.0G  837M  7.2G  11% /
+devtmpfs                        devtmpfs  488M     0  488M   0% /dev
+tmpfs                           tmpfs     496M     0  496M   0% /dev/shm
+tmpfs                           tmpfs     496M  6.8M  490M   2% /run
+tmpfs                           tmpfs     496M     0  496M   0% /sys/fs/cgroup
+/dev/sda2                       xfs      1014M   61M  954M   6% /boot
+/dev/mapper/vg_var-lv_var       ext4      922M  212M  646M  25% /var
+tmpfs                           tmpfs     100M     0  100M   0% /run/user/1000
+]0;vagrant@otuslinuxlvm:/home/vagrant[root@otuslinuxlvm vagrant]# lvremove /dev/vg_root/lv_root
+Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
+  Logical volume "lv_root" successfully removed
+]0;vagrant@otuslinuxlvm:/home/vagrant[root@otuslinuxlvm vagrant]# vgremove /dev/vg_root
+  Volume group "vg_root" successfully removed
+]0;vagrant@otuslinuxlvm:/home/vagrant[root@otuslinuxlvm vagrant]# pvremove /dev/sdb
+  Labels on physical volume "/dev/sdb" successfully wiped.
+]0;vagrant@otuslinuxlvm:/home/vagrant[root@otuslinuxlvm vagrant]# pvremove /dev/sdbvgremove /dev/vg_rootlvremove /dev/vg_root/lv_rootdf -Th[K[1Plsblk
+NAME                     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                        8:0    0   40G  0 disk 
+├─sda1                     8:1    0    1M  0 part 
+├─sda2                     8:2    0    1G  0 part /boot
+└─sda3                     8:3    0   39G  0 part 
+  ├─VolGroup00-LogVol00  253:0    0    8G  0 lvm  /
+  └─VolGroup00-LogVol01  253:1    0  1.5G  0 lvm  [SWAP]
+sdb                        8:16   0   10G  0 disk 
+sdc                        8:32   0    2G  0 disk 
+├─vg_var-lv_var_rmeta_0  253:3    0    4M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rimage_0 253:4    0  952M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sdd                        8:48   0    1G  0 disk 
+├─vg_var-lv_var_rmeta_1  253:5    0    4M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rimage_1 253:6    0  952M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sde                        8:64   0    1G  0 disk 
+]0;vagrant@otuslinuxlvm:/home/vagrant[root@otuslinuxlvm vagrant]# lvcreat
