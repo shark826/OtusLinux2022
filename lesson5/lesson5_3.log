@@ -1,0 +1,49 @@
+Script started on Sun Nov 27 13:14:28 2022
+]0;root@zfsotus:~[?1034h[root@zfsotus ~]# wget -O otus_task2.file --no-check-certificate 'https://drive.google.com/u/0/u c?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download'
+--2022-11-27 13:14:49--  https://drive.google.com/u/0/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download
+Resolving drive.google.com (drive.google.com)... 64.233.164.194, 2a00:1450:4010:c07::c2
+Connecting to drive.google.com (drive.google.com)|64.233.164.194|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download [following]
+--2022-11-27 13:14:50--  https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 303 See Other
+Location: https://doc-00-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/ermc78d7lpblrd1k52il33qmi4ohn32g/1669554825000/16189157874053420687/*/1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG?e=download&uuid=83141531-281a-4c77-a94a-688f8fd80083 [following]
+Warning: wildcards not supported in HTTP.
+--2022-11-27 13:14:53--  https://doc-00-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/ermc78d7lpblrd1k52il33qmi4ohn32g/1669554825000/16189157874053420687/*/1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG?e=download&uuid=83141531-281a-4c77-a94a-688f8fd80083
+Resolving doc-00-bo-docs.googleusercontent.com (doc-00-bo-docs.googleusercontent.com)... 216.58.210.129, 2a00:1450:4026:804::2001
+Connecting to doc-00-bo-docs.googleusercontent.com (doc-00-bo-docs.googleusercontent.com)|216.58.210.129|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 5432736 (5.2M) [application/octet-stream]
+Saving to: 'otus_task2.file'
+
+ 0% [                                                       ] 0           --.-K/s               1% [                                                       ] 62,726       306KB/s              4% [=>                                                     ] 264,610      643KB/s             14% [=======>                                               ] 796,812     1.08MB/s             36% [===================>                                   ] 1,986,527   2.10MB/s             47% [=========================>                             ] 2,576,351   2.16MB/s             70% [=====================================>                 ] 3,821,535   2.56MB/s             100%[======================================================>] 5,432,736   3.55MB/s   in 1.5s   
+
+2022-11-27 13:14:55 (3.55 MB/s) - 'otus_task2.file' saved [5432736/5432736]
+
+]0;root@zfsotus:~[root@zfsotus ~]# ll
+total 12536
+-rw-------. 1 root root    5763 May 12  2018 anaconda-ks.cfg
+-rw-r--r--. 1 root root 7275140 Nov 27 12:21 [0m[38;5;9marchive.tar.gz[0m
+-rw-r--r--. 1 root root   85841 Nov 27 10:46 lesso5_1.log
+-rw-r--r--. 1 root root   18522 Nov 27 12:42 lesson5_2.log
+-rw-r--r--. 1 root root       0 Nov 27 13:14 lesson5_3.log
+-rw-------. 1 root root    5432 May 12  2018 original-ks.cfg
+-rw-r--r--. 1 root root 5432736 Nov 27 13:14 otus_task2.file
+drwxr-xr-x. 2 root root      32 May 15  2020 [38;5;27mzpoolexport[0m
+]0;root@zfsotus:~[root@zfsotus ~]# ll /otus/
+total 3
+drwxr-xr-x. 102 root root 102 May 15  2020 [0m[38;5;27mhometask2[0m
+]0;root@zfsotus:~[root@zfsotus ~]# zfs receive otus/test@today < otus_task2.file
+]0;root@zfsotus:~[root@zfsotus ~]# zfs receive otus/test@today < otus_task2.file[root@zfsotus ~]# ll /otus/[K[K /otus/
+total 4
+drwxr-xr-x. 102 root root 102 May 15  2020 [0m[38;5;27mhometask2[0m
+drwxr-xr-x.   3 root root  11 May 15  2020 [38;5;27mtest[0m
+]0;root@zfsotus:~[root@zfsotus ~]# find /otus/test -name "secret_message"
+/otus/test/task1/file_mess/secret_message
+]0;root@zfsotus:~[root@zfsotus ~]# cat /otus/test/task1/file_mess/secret_message
+https://github.com/sindresorhus/awesome
+]0;root@zfsotus:~[root@zfsotus ~]# exit
+exit
+
+Script done on Sun Nov 27 13:26:22 2022

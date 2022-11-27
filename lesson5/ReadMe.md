@@ -25,7 +25,7 @@
 ```sudo -i```  
 
 Выполняю запуск утилиты script для записи действий в консоли:  
-```script lesson5-1.log```  
+```script lesson5_1.log```  
 
 **1. Пример определения наилучшего метода сжатия**  
 
@@ -109,10 +109,13 @@ otus2  compressratio         2.21x                  -
 otus3  compressratio         3.63x                  -
 otus4  compressratio         1.00x                  -
 ```
-Таким образом, у нас получается, что алгоритм gzip-9 самый эффективный по сжатию.  
+Таким образом, у нас получается, что алгоритм gzip-9 применный в otus3 самый эффективный по сжатию.  
 
 
 **2. Определение настроек пула**  
+
+Стартую script для записи действий в консоли:  
+```script lesson5_2.log```  
 
 Скачиваем архив в домашний каталог:  
 
@@ -140,8 +143,43 @@ zpool import -d zpoolexport/ otus
 
 Далее нам нужно определить настройки  
 Запрос сразу всех параметров пула:  
-``zpool get all otus``
+``zpool get all otus``  
 Запрос сразу всех параметром файловой системы:  
-``zfs get all otus``
+``zfs get all otus``  
+
+
+**3. Работа со снапшотом**
+
+Стартую script для записи действий в консоли:  
+```script lesson5_3.log```  
+
+Скачаем файл:  
+
+```
+wget -O otus_task2.file --no-check-certificate 'https://drive.google.com/u/0/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download'
+```
+Восстановим файловую систему из снапшота:  
+```
+zfs receive otus/test@today < otus_task2.file
+```
+
+Далее, ищем в каталоге /otus/test файл с именем “secret_message”:  
+```
+find /otus/test -name "secret_message"
+```
+```
+/otus/test/task1/file_mess/secret_message
+```
+
+Смотрим содержимое найденного файла:  
+```
+cat /otus/test/task1/file_mess/secret_message
+```
+```
+https://github.com/sindresorhus/awesome
+```
+
+пройдем по ссылке из секретной фразы
+скриншот в репозитории
 
 
