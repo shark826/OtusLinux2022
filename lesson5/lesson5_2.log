@@ -1,0 +1,271 @@
+Script started on Sun Nov 27 12:20:51 2022
+]0;root@zfsotus:~[?1034h[root@zfsotus ~]# exitwget -O archive.tar.gz --no-check-certificate â'https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJJivOAt60yukkg&export=download'
+âhttps://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download: Scheme missing.
+]0;root@zfsotus:~[root@zfsotus ~]# wget -O archive.tar.gz --no-check-certificate â'https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJJivOAt60yukkg&export=download'[A[root@zfsotus ~]# wget -O archive.tar.gz --no-check-certificate â'https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3h'https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJi[1P[Aroot@zfsotus ~]# wget -O archive.tar.gz --no-check-certificate 
+
+--2022-11-27 12:21:16--  https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download
+Resolving drive.google.com (drive.google.com)... 64.233.164.194, 2a00:1450:4010:c07::c2
+Connecting to drive.google.com (drive.google.com)|64.233.164.194|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://drive.google.com/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download [following]
+--2022-11-27 12:21:16--  https://drive.google.com/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 303 See Other
+Location: https://doc-0c-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/ge12s7ueu5q2kcgjo4snfjopjuq94qe0/1669551675000/16189157874053420687/*/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg?e=download&uuid=cc2c9350-fddb-4a87-9e13-cbfdc6101561 [following]
+Warning: wildcards not supported in HTTP.
+--2022-11-27 12:21:25--  https://doc-0c-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/ge12s7ueu5q2kcgjo4snfjopjuq94qe0/1669551675000/16189157874053420687/*/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg?e=download&uuid=cc2c9350-fddb-4a87-9e13-cbfdc6101561
+Resolving doc-0c-bo-docs.googleusercontent.com (doc-0c-bo-docs.googleusercontent.com)... 216.58.210.129, 2a00:1450:4026:804::2001
+Connecting to doc-0c-bo-docs.googleusercontent.com (doc-0c-bo-docs.googleusercontent.com)|216.58.210.129|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 7275140 (6.9M) [application/x-gzip]
+Saving to: 'archive.tar.gz'
+
+ 0% [                                                                                ] 0           --.-K/s               0% [                                                                                ] 58,230       278KB/s              3% [=>                                                                              ] 256,145      618KB/s             11% [========>                                                                       ] 836,736     1.31MB/s             14% [==========>                                                                     ] 1,032,025   1.14MB/s             41% [================================>                                               ] 3,035,108   2.41MB/s             57% [=============================================>                                  ] 4,198,372   2.81MB/s             80% [===============================================================>                ] 5,885,924   3.43MB/s             99% [==============================================================================> ] 7,229,412   3.75MB/s             100%[===============================================================================>] 7,275,140   3.77MB/s   in 1.8s   
+
+2022-11-27 12:21:28 (3.77 MB/s) - 'archive.tar.gz' saved [7275140/7275140]
+
+]0;root@zfsotus:~[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# [K[root@zfsotus ~]# tar -xzvf archive.tar.gz
+zpoolexport/
+zpoolexport/filea
+zpoolexport/fileb
+]0;root@zfsotus:~[root@zfsotus ~]# ll
+total 7212
+-rw-------. 1 root root    5763 May 12  2018 anaconda-ks.cfg
+-rw-r--r--. 1 root root 7275140 Nov 27 12:21 [0m[38;5;9marchive.tar.gz[0m
+-rw-r--r--. 1 root root   85841 Nov 27 10:46 lesso5_1.log
+-rw-r--r--. 1 root root    4096 Nov 27 12:21 lesson5_2.log
+-rw-------. 1 root root    5432 May 12  2018 original-ks.cfg
+drwxr-xr-x. 2 root root      32 May 15  2020 [38;5;27mzpoolexport[0m
+]0;root@zfsotus:~[root@zfsotus ~]# zpool import -d zpoolexport/
+   pool: otus
+     id: 6554193320433390805
+  state: ONLINE
+ action: The pool can be imported using its name or numeric identifier.
+ config:
+
+	otus                         ONLINE
+	  mirror-0                   ONLINE
+	    /root/zpoolexport/filea  ONLINE
+	    /root/zpoolexport/fileb  ONLINE
+]0;root@zfsotus:~[root@zfsotus ~]# zpool import -d zpoolexport/ otus
+]0;root@zfsotus:~[root@zfsotus ~]# zpool status
+  pool: otus
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME                         STATE     READ WRITE CKSUM
+	otus                         ONLINE       0     0     0
+	  mirror-0                   ONLINE       0     0     0
+	    /root/zpoolexport/filea  ONLINE       0     0     0
+	    /root/zpoolexport/fileb  ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: otus1
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	otus1       ONLINE       0     0     0
+	  mirror-0  ONLINE       0     0     0
+	    sdb     ONLINE       0     0     0
+	    sdc     ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: otus2
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	otus2       ONLINE       0     0     0
+	  mirror-0  ONLINE       0     0     0
+	    sdd     ONLINE       0     0     0
+	    sde     ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: otus3
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	otus3       ONLINE       0     0     0
+	  mirror-0  ONLINE       0     0     0
+	    sdf     ONLINE       0     0     0
+	    sdg     ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: otus4
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	otus4       ONLINE       0     0     0
+	  mirror-0  ONLINE       0     0     0
+	    sdh     ONLINE       0     0     0
+	    sdi     ONLINE       0     0     0
+
+errors: No known data errors
+]0;root@zfsotus:~[root@zfsotus ~]# zpool status otus
+  pool: otus
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME                         STATE     READ WRITE CKSUM
+	otus                         ONLINE       0     0     0
+	  mirror-0                   ONLINE       0     0     0
+	    /root/zpoolexport/filea  ONLINE       0     0     0
+	    /root/zpoolexport/fileb  ONLINE       0     0     0
+
+errors: No known data errors
+]0;root@zfsotus:~[root@zfsotus ~]# zpool get all otus
+NAME  PROPERTY                       VALUE                          SOURCE
+otus  size                           480M                           -
+otus  capacity                       0%                             -
+otus  altroot                        -                              default
+otus  health                         ONLINE                         -
+otus  guid                           6554193320433390805            -
+otus  version                        -                              default
+otus  bootfs                         -                              default
+otus  delegation                     on                             default
+otus  autoreplace                    off                            default
+otus  cachefile                      -                              default
+otus  failmode                       wait                           default
+otus  listsnapshots                  off                            default
+otus  autoexpand                     off                            default
+otus  dedupditto                     0                              default
+otus  dedupratio                     1.00x                          -
+otus  free                           478M                           -
+otus  allocated                      2.09M                          -
+otus  readonly                       off                            -
+otus  ashift                         0                              default
+otus  comment                        -                              default
+otus  expandsize                     -                              -
+otus  freeing                        0                              -
+otus  fragmentation                  0%                             -
+otus  leaked                         0                              -
+otus  multihost                      off                            default
+otus  checkpoint                     -                              -
+otus  load_guid                      15492607486071669093           -
+otus  autotrim                       off                            default
+otus  feature@async_destroy          enabled                        local
+otus  feature@empty_bpobj            active                         local
+otus  feature@lz4_compress           active                         local
+otus  feature@multi_vdev_crash_dump  enabled                        local
+otus  feature@spacemap_histogram     active                         local
+otus  feature@enabled_txg            active                         local
+otus  feature@hole_birth             active                         local
+otus  feature@extensible_dataset     active                         local
+otus  feature@embedded_data          active                         local
+otus  feature@bookmarks              enabled                        local
+otus  feature@filesystem_limits      enabled                        local
+otus  feature@large_blocks           enabled                        local
+otus  feature@large_dnode            enabled                        local
+otus  feature@sha512                 enabled                        local
+otus  feature@skein                  enabled                        local
+otus  feature@edonr                  enabled                        local
+otus  feature@userobj_accounting     active                         local
+otus  feature@encryption             enabled                        local
+otus  feature@project_quota          active                         local
+otus  feature@device_removal         enabled                        local
+otus  feature@obsolete_counts        enabled                        local
+otus  feature@zpool_checkpoint       enabled                        local
+otus  feature@spacemap_v2            active                         local
+otus  feature@allocation_classes     enabled                        local
+otus  feature@resilver_defer         enabled                        local
+otus  feature@bookmark_v2            enabled                        local
+]0;root@zfsotus:~[root@zfsotus ~]# zfs get all otus
+NAME  PROPERTY              VALUE                  SOURCE
+otus  type                  filesystem             -
+otus  creation              Fri May 15  4:00 2020  -
+otus  used                  2.04M                  -
+otus  available             350M                   -
+otus  referenced            24K                    -
+otus  compressratio         1.00x                  -
+otus  mounted               yes                    -
+otus  quota                 none                   default
+otus  reservation           none                   default
+otus  recordsize            128K                   local
+otus  mountpoint            /otus                  default
+otus  sharenfs              off                    default
+otus  checksum              sha256                 local
+otus  compression           zle                    local
+otus  atime                 on                     default
+otus  devices               on                     default
+otus  exec                  on                     default
+otus  setuid                on                     default
+otus  readonly              off                    default
+otus  zoned                 off                    default
+otus  snapdir               hidden                 default
+otus  aclinherit            restricted             default
+otus  createtxg             1                      -
+otus  canmount              on                     default
+otus  xattr                 on                     default
+otus  copies                1                      default
+otus  version               5                      -
+otus  utf8only              off                    -
+otus  normalization         none                   -
+otus  casesensitivity       sensitive              -
+otus  vscan                 off                    default
+otus  nbmand                off                    default
+otus  sharesmb              off                    default
+otus  refquota              none                   default
+otus  refreservation        none                   default
+otus  guid                  14592242904030363272   -
+otus  primarycache          all                    default
+otus  secondarycache        all                    default
+otus  usedbysnapshots       0B                     -
+otus  usedbydataset         24K                    -
+otus  usedbychildren        2.01M                  -
+otus  usedbyrefreservation  0B                     -
+otus  logbias               latency                default
+otus  objsetid              54                     -
+otus  dedup                 off                    default
+otus  mlslabel              none                   default
+otus  sync                  standard               default
+otus  dnodesize             legacy                 default
+otus  refcompressratio      1.00x                  -
+otus  written               24K                    -
+otus  logicalused           1020K                  -
+otus  logicalreferenced     12K                    -
+otus  volmode               default                default
+otus  filesystem_limit      none                   default
+otus  snapshot_limit        none                   default
+otus  filesystem_count      none                   default
+otus  snapshot_count        none                   default
+otus  snapdev               hidden                 default
+otus  acltype               off                    default
+otus  context               none                   default
+otus  fscontext             none                   default
+otus  defcontext            none                   default
+otus  rootcontext           none                   default
+otus  relatime              off                    default
+otus  redundant_metadata    all                    default
+otus  overlay               off                    default
+otus  encryption            off                    default
+otus  keylocation           none                   default
+otus  keyformat             none                   default
+otus  pbkdf2iters           0                      default
+otus  special_small_blocks  0                      default
+]0;root@zfsotus:~[root@zfsotus ~]# zfs get available otus
+NAME  PROPERTY   VALUE  SOURCE
+otus  available  350M   -
+]0;root@zfsotus:~[root@zfsotus ~]# ll /otus/
+total 3
+drwxr-xr-x. 102 root root 102 May 15  2020 [0m[38;5;27mhometask2[0m
+]0;root@zfsotus:~[root@zfsotus ~]# ll /otus/l[1P[1P^C
+]0;root@zfsotus:~[root@zfsotus ~]#  zfs get recordsize otus
+NAME  PROPERTY    VALUE    SOURCE
+otus  recordsize  128K     local
+]0;root@zfsotus:~[root@zfsotus ~]# ex  exit
+exit
+
+Script done on Sun Nov 27 12:42:53 2022
