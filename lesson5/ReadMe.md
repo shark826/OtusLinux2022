@@ -1,7 +1,7 @@
-# Курс Administrator Linux. Professional #
+# Курс Administrator Linux. Professional
 
-### Домашнее задание ###  
-### Практические навыки работы с ZFS ###  
+### Домашнее задание №5
+### Практические навыки работы с ZFS
 
 **1. Создаём виртуальную машину**  
   
@@ -16,7 +16,7 @@
 запускаем виртуальную машину  
   
 Будет создана виртуальная машина, с 8 дисками и уже установленным и готовым к работе ZFS.  
-Прим. ZFS заработал после первого рестарта машины
+Прим. ZFS заработал после выполнения команды: *modprobe zfs*
 
 Заходим на сервер:  
 ```vagrant ssh```  
@@ -24,6 +24,90 @@
 Внутри виртуалки переходим в root пользователя:  
 ```sudo -i```  
 
-Выполняю запуск утилиты script для записи действий в консоли  
+Выполняю запуск утилиты script для записи действий в консоли:  
 ```script lesson5-1.log```  
+
+**1. Пример определения наилучшего метода сжатия**  
+
+Смотрим список дисков в виртуальной машине:  
+```lsblk```
+
+Создаём 4 пула каждый из двух дисков в режиме RAID 1:  
+```
+zpool create otus1 mirror /dev/sdb /dev/sdc
+zpool create otus2 mirror /dev/sdd /dev/sde
+zpool create otus3 mirror /dev/sdf /dev/sdg
+zpool create otus4 mirror /dev/sdh /dev/sdi
+```
+Смотрим информацию о пулах:  
+```zpool list```
+
+Добавим разные алгоритмы сжатия в каждый пул:  
+- Алгоритм lzjb:  
+```zfs set compression=lzjb otus1```
+- Алгоритм lz4:  
+```zfs set compression=lz4 otus2```
+- Алгоритм gzip:  
+```zfs set compression=gzip-9 otus3```
+- Алгоритм zle:  
+```zfs set compression=zle otus4```
+
+Проверим, что все файловые системы имеют разные методы сжатия:  
+
+```zfs get all | grep compression```
+```
+otus1  compression           lzjb                   local
+otus2  compression           lz4                    local
+otus3  compression           gzip-9                 local
+otus4  compression           zle                    local
+```
+
+Сжатие файлов будет работать только с файлами, которые были добавлены после включение настройки сжатия.   
+Скачаем один и тот же текстовый файл во все пулы:  
+```
+for i in {1..4}; do wget -P /otus$i https://gutenberg.org/cache/epub/2600/pg2600.converter.log; done
+```
+
+Проверим наличие файла во всех пулах:  
+
+```
+ls -l /otus*
+```
+```
+/otus1:
+total 22033
+-rw-r--r--. 1 root root 40875295 Nov  2 08:36 pg2600.converter.log
+
+/otus2:
+total 17979
+-rw-r--r--. 1 root root 40875295 Nov  2 08:36 pg2600.converter.log
+
+/otus3:
+total 10952
+-rw-r--r--. 1 root root 40875295 Nov  2 08:36 pg2600.converter.log
+
+/otus4:
+total 39946
+-rw-r--r--. 1 root root 40875295 Nov  2 08:36 pg2600.converter.log
+```
+
+Проверим, сколько места занимает один и тот же файл в разных пулах и проверим степень сжатия файлов:  
+```zfs list```
+```
+NAME    USED  AVAIL     REFER  MOUNTPOINT
+otus1  21.6M   330M     21.5M  /otus1
+otus2  17.7M   334M     17.6M  /otus2
+otus3  10.8M   341M     10.7M  /otus3
+otus4  39.0M   313M     38.9M  /otus4
+```
+```zfs get all | grep compressratio | grep -v ref```
+```
+otus1  compressratio         1.80x                  -
+otus2  compressratio         2.21x                  -
+otus3  compressratio         3.63x                  -
+otus4  compressratio         1.00x                  -
+```
+Таким образом, у нас получается, что алгоритм gzip-9 самый эффективный по сжатию. 
+
+
 
