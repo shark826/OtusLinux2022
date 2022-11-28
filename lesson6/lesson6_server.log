@@ -1,0 +1,146 @@
+Script started on Mon Nov 28 18:36:22 2022
+]0;vagrant@nfss:~[?1034h[vagrant@nfss ~]$ exitsudo -i
+]0;root@nfss:~[?1034h[root@nfss ~]# um insta[1@yum install nfs-utils -y
+Failed to set locale, defaulting to C
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+ * base: mirror.sale-dedic.com
+ * extras: mirror.corbina.net
+ * updates: mirror.corbina.net
+base                                                                                            | 3.6 kB  00:00:00     
+extras                                                                                          | 2.9 kB  00:00:00     
+updates                                                                                         | 2.9 kB  00:00:00     
+(1/4): base/7/x86_64/group_gz                                                                   | 153 kB  00:00:00     
+(2/4): extras/7/x86_64/primary_db                                                               | 249 kB  00:00:00     
+(4/4): updates/7/x86_64/primary_db            2% [-                                  ]  0.0 B/s | 690 kB  --:--:-- ETA (4/4): updates/7/x86_64/primary_db            6% [==                                 ] 1.1 MB/s | 1.5 MB  00:00:21 ETA (4/4): updates/7/x86_64/primary_db           11% [===-                               ] 1.2 MB/s | 2.7 MB  00:00:17 ETA (4/4): updates/7/x86_64/primary_db           17% [======                             ] 1.5 MB/s | 4.4 MB  00:00:13 ETA (3/4): base/7/x86_64/primary_db              26% [=========                          ] 1.8 MB/s | 6.4 MB  00:00:10 ETA (3/4): base/7/x86_64/primary_db              36% [============-                      ] 2.2 MB/s | 8.9 MB  00:00:07 ETA (3/4): base/7/x86_64/primary_db              46% [================                   ] 2.5 MB/s |  11 MB  00:00:05 ETA (3/4): base/7/x86_64/primary_db                                                                 | 6.1 MB  00:00:02     
+(4/4): updates/7/x86_64/primary_db           55% [===================                ] 2.8 MB/s |  14 MB  00:00:03 ETA (4/4): updates/7/x86_64/primary_db           61% [=====================              ] 2.9 MB/s |  15 MB  00:00:03 ETA (4/4): updates/7/x86_64/primary_db           64% [======================-            ] 2.9 MB/s |  16 MB  00:00:02 ETA (4/4): updates/7/x86_64/primary_db           68% [========================           ] 2.9 MB/s |  17 MB  00:00:02 ETA (4/4): updates/7/x86_64/primary_db           72% [=========================          ] 2.9 MB/s |  18 MB  00:00:02 ETA (4/4): updates/7/x86_64/primary_db           76% [==========================-        ] 2.9 MB/s |  19 MB  00:00:02 ETA (4/4): updates/7/x86_64/primary_db           79% [===========================-       ] 2.9 MB/s |  19 MB  00:00:01 ETA (4/4): updates/7/x86_64/primary_db           84% [=============================      ] 2.9 MB/s |  21 MB  00:00:01 ETA (4/4): updates/7/x86_64/primary_db           89% [===============================    ] 3.0 MB/s |  22 MB  00:00:00 ETA (4/4): updates/7/x86_64/primary_db           95% [=================================  ] 3.1 MB/s |  23 MB  00:00:00 ETA (4/4): updates/7/x86_64/primary_db                                                              |  18 MB  00:00:05     
+Resolving Dependencies
+--> Running transaction check
+---> Package nfs-utils.x86_64 1:1.3.0-0.66.el7 will be updated
+---> Package nfs-utils.x86_64 1:1.3.0-0.68.el7.2 will be an update
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=======================================================================================================================
+ Package                    Arch                    Version                             Repository                Size
+=======================================================================================================================
+Updating:
+ nfs-utils                  x86_64                  1:1.3.0-0.68.el7.2                  updates                  413 k
+
+Transaction Summary
+=======================================================================================================================
+Upgrade  1 Package
+
+Total download size: 413 k
+Downloading packages:
+No Presto metadata available for updates
+warning: /var/cache/yum/x86_64/7/updates/packages/nfs-utils-1.3.0-0.68.el7.2.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY
+Public key for nfs-utils-1.3.0-0.68.el7.2.x86_64.rpm is not installed
+nfs-utils-1.3.0-0.68.el7.2.x86_64.rpm                                                           | 413 kB  00:00:00     
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Importing GPG key 0xF4A80EB5:
+ Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+ Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+ Package    : centos-release-7-8.2003.0.el7.centos.x86_64 (@anaconda)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [                                                             ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###                                                          ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [######                                                       ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [##########                                                   ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [############                                                 ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###############                                              ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#################                                            ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###################                                          ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#######################                                      ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [##########################                                   ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [############################                                 ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#############################                                ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###############################                              ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [################################                             ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###################################                          ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#####################################                        ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [########################################                     ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###########################################                  ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [##############################################               ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###############################################              ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#################################################            ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [##################################################           ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###################################################          ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [######################################################       ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#######################################################      ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [########################################################     ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [#########################################################    ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [##########################################################   ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [###########################################################  ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64 [############################################################ ] 1/2  Updating   : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64                                                                 1/2 
+  Cleanup    : 1:nfs-utils-1.3.0-0.66.el7.x86_64                                                                   2/2 
+  Verifying  : 1:nfs-utils-1.3.0-0.68.el7.2.x86_64                                                                 1/2 
+  Verifying  : 1:nfs-utils-1.3.0-0.66.el7.x86_64                                                                   2/2 
+
+Updated:
+  nfs-utils.x86_64 1:1.3.0-0.68.el7.2                                                                                  
+
+Complete!
+]0;root@nfss:~[root@nfss ~]# systemctl enable firewalld.service   --now
+Created symlink from /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service to /usr/lib/systemd/system/firewalld.service.
+Created symlink from /etc/systemd/system/multi-user.target.wants/firewalld.service to /usr/lib/systemd/system/firewalld.service.
+]0;root@nfss:~[root@nfss ~]# systemctl enable firewalld.service --now      [1P[1P[1P[1P[1P[1P[1@s[1@t[1@a[1@t[1@u[1@s
+[1;32m●[0m firewalld.service - firewalld - dynamic firewall daemon
+   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled; vendor preset: enabled)
+   Active: [1;32mactive (running)[0m since Mon 2022-11-28 18:42:15 UTC; 32s ago
+     Docs: man:firewalld(1)
+ Main PID: 22168 (firewalld)
+   CGroup: /system.slice/firewalld.service
+           └─22168 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
+
+Nov 28 18:42:15 nfss systemd[1]: Starting firewalld - dynamic firewall daemon...
+Nov 28 18:42:15 nfss systemd[1]: Started firewalld - dynamic firewall daemon.
+Nov 28 18:42:15 nfss firewalld[22168]: [1;39mWARNING: AllowZoneDrifting is enabled. This is considered an insecure co... now.[0m
+Hint: Some lines were ellipsized, use -l to show in full.
+]0;root@nfss:~[root@nfss ~]# firewall-cmd --add-service="nfs3" \
+>             --add-service="rpc-bind" \
+>              --add-service="mountd" \
+>              --permanent
+success
+]0;root@nfss:~[root@nfss ~]# firewall-cmd --reload
+success
+]0;root@nfss:~[root@nfss ~]# ystemctl enable nfs --now       --now[1@systemctl enable nfs --now      
+nfs-blkmap.service   nfs-rquotad.service  nfs-server.service   nfs.service          
+[root@nfss ~]# systemctl enable nfs.service --now
+Created symlink from /etc/systemd/system/multi-user.target.wants/nfs-server.service to /usr/lib/systemd/system/nfs-server.service.
+]0;root@nfss:~[root@nfss ~]# systemctl enable nfs.service --now[1P[1P[1P[1P[1P[1P[1@s[1@t[1@a[1@t[1@u[1@s
+[1;32m●[0m nfs-server.service - NFS server and services
+   Loaded: loaded (/usr/lib/systemd/system/nfs-server.service; enabled; vendor preset: disabled)
+   Active: [1;32mactive (exited)[0m since Mon 2022-11-28 18:45:12 UTC; 22s ago
+  Process: 22376 ExecStartPost=/bin/sh -c if systemctl -q is-active gssproxy; then systemctl reload gssproxy ; fi (code=exited, status=0/SUCCESS)
+  Process: 22359 ExecStart=/usr/sbin/rpc.nfsd $RPCNFSDARGS (code=exited, status=0/SUCCESS)
+  Process: 22358 ExecStartPre=/usr/sbin/exportfs -r (code=exited, status=0/SUCCESS)
+ Main PID: 22359 (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/nfs-server.service
+
+Nov 28 18:45:12 nfss systemd[1]: Starting NFS server and services...
+Nov 28 18:45:12 nfss systemd[1]: Started NFS server and services.
+]0;root@nfss:~[root@nfss ~]# ss -tnplu
+Netid State      Recv-Q Send-Q            Local Address:Port                           Peer Address:Port              
+udp   UNCONN     0      0                             *:2049                                      *:*                  
+udp   UNCONN     0      0                     127.0.0.1:323                                       *:*                   users:(("chronyd",pid=353,fd=5))
+udp   UNCONN     0      0                             *:68                                        *:*                   users:(("dhclient",pid=2387,fd=6))
+udp   UNCONN     0      0                             *:51272                                     *:*                   users:(("rpc.statd",pid=22352,fd=8))
+udp   UNCONN     0      0                             *:20048                                     *:*                   users:(("rpc.mountd",pid=22357,fd=7))
+udp   UNCONN     0      0                             *:33641                                     *:*                  
+udp   UNCONN     0      0                             *:111                                       *:*                   users:(("rpcbind",pid=344,fd=6))
+udp   UNCONN     0      0                     127.0.0.1:904                                       *:*                   users:(("rpc.statd",pid=22352,fd=5))
+udp   UNCONN     0      0                             *:932                                       *:*                   users:(("rpcbind",pid=344,fd=7))
+udp   UNCONN     0      0                          [::]:59612                                  [::]:*                  
+udp   UNCONN     0      0                          [::]:2049                                   [::]:*                  
+udp   UNCONN     0      0                          [::]:56371                                  [::]:*                   users:(("rpc.statd",pid=22352,fd=10))
+udp   UNCONN     0      0                         [::1]:323                                    [::]:*                   users:(("chronyd",pid=353,fd=6))
+udp   UNCONN     0      0                          [::]:20048                                  [::]:*                   users:(("rpc.mountd",pid=22357,fd=9))
+udp   UNCONN     0      0                          [::]:111                                    [::]:*                   users:(("rpcbind",pid=344,fd=9))
+udp   UNCONN     0      0                          [::]:932                                    [::]:*                   users:(("rpcbind",pid=344,fd=10))
+tcp   LISTEN     0      100                   127.0.0.1:25                                        *:*                   users:(("master",pid=826,fd=13))
+tcp   LISTEN     0      64                            *:2049                                      *:*                  
+tcp   LISTEN     0      64                            *:41995                                     *:*                  
+tcp   LISTEN     0      128                           *:111                                       *:*                   users:(("rpcbind",pid=344,fd=8))
+tcp   LISTEN     0      128                           *:20048                                     *:*                   users:(("rpc.mountd",pid=22357,fd=8))
+tcp   LISTEN     0      128                           *:55093                                     *:*                   users:(("rpc.statd",pid=22352,fd=9))
+tcp   LISTEN     0      128                           *:22                                        *:*                   users:(("sshd",pid=613,fd=3))
+tcp   LISTEN     0      100                       [::1]:25                                     [::]:*                   users:(("master",pid=826,fd=14))
+tcp   LISTEN     0      128                        [::]:56512                                  [::]:*                   users:(("rpc.statd",pid=22352,fd=11))
+tcp   LISTEN     0      64                         [::]:2049                                   [::]:*                  
+tcp   LISTEN     0      64                         [::]:44069                                  [::]:*                  
+tcp   LISTEN     0      128                        [::]:111                                    [::]:*                   users:(("rpcbind",pid=344,fd=11))
+tcp   LISTEN     0      128                        [::]:20048                                  [::]:*                   users:(("rpc.mountd",pid=22357,fd=10))
+tcp   LISTEN     0      128                        [::]:22                                     [::]:*                   users:(("sshd",pid=613,fd=4))
+]0;root@nfss:~[root@nfss ~]# mkdir -p /srv/share/upload
+]0;root@nfss:~[root@nfss ~]# срщ[K[K[Kchown -R nfsnoс�chown -R nfsno              [K[K[K^C
+]0;root@nfss:~[root@nfss ~]# chown -R nfsnobody : n f s nobody   / s r v/ s h are/ 
+]0;root@nfss:~[root@nfss ~]# chmod 0777 /srv/share/upload/
+]0;root@nfss:~[root@nfss ~]# cat << EOF > /etc/exports
+> /srv/share 192.168.56.11/32(rw,sync,root_squash)
+> EOF
+]0;root@nfss:~[root@nfss ~]# exportfs -r
+]0;root@nfss:~[root@nfss ~]# exportfs -r s
+/srv/share  192.168.56.11/32(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)
+]0;root@nfss:~[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# [K[root@nfss ~]# exit
+logout
+]0;vagrant@nfss:~[vagrant@nfss ~]$ exit
+exit
+
+Script done on Mon Nov 28 18:58:23 2022
