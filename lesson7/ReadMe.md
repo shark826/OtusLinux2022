@@ -80,57 +80,13 @@ exportfs -s
 
 **3. Настройка клиента**  
 
-переходим в режи root:  
-```bash
-su
-```
-
 Стартую script для записи действий в консоли:  
 ```script lesson6_client.log```  
 
-Так же как и на сервере сделаем установку утилит:  
-```bash
-yum install nfs-utils -y
-```  
-
-- включаем firewall и проверяем, что он работает  
-
-```bash
-systemctl enable firewalld.service --now
-systemctl status firewalld.service
-```
-
-- добавляем в _/etc/fstab_ строку_
-```
-echo "192.168.56.10:/srv/share/ /mnt nfs vers=3,proto=udp,noauto,x-systemd.automount 0 0" >> /etc/fstab
-```
-и выполняем
-```bash
-systemctl daemon-reload
-systemctl restart remote-fs.target
-```
-- заходим в директорию `/mnt/` и проверяем успешность монтирования
-```bash
-mount | grep mnt
-```
 
 все вышеописаные команды включаю в скрипт **_nfsc_script.sh_**
 
-
-**4. Проверка работоспособности**
-
-- заходим на сервер
-- заходим в каталог `/srv/share/upload`
-- создаём тестовый файл `touch check_file`
-![Создаём тестовый файл](server.png)
-- заходим на клиент
-- заходим в каталог `/mnt/upload`
-- проверяем наличие ранее созданного файла
-- создаём тестовый файл `touch client_file`
-- проверяем, что файл успешно создан
-![Клиент тестовый файл](client.png)
-
-**5. Удаление виртуальных машин и автоматизация стенда NFS**
+**4. Удаление виртуальных машин и автоматизация стенда NFS**
 
 Удаляю виртуалки
 
@@ -150,7 +106,5 @@ nfss.vm.provision "shell", path: "nfss_script.sh"
 ```
 nfss.vm.provision "shell", path: "nfsc_script.sh"
 ```
-
-переименовываю файл Vagrantfile_ver0 в Vagrantfile для старта автоматизированного стенда
 
 
