@@ -1,84 +1,66 @@
 # Курс Administrator Linux. Professional
 
-### Домашнее задание №6
-### Vagrant стенд для NFS
+### Домашнее задание №7
+### Управления пакетами. Дистрибьюция софта
 
-в ДЗ я сначала проведу настройку сервера и клиента в ручном режиме, а затем все команды на сервере и клиенте запишу в скрипты, которые будут исполняться при запуске Vagrant, используя измененый Vagrantfile.
+в ДЗ я сначала проведу настройку сервера в ручном режиме, а затем все команды запишу в скрипт, который будет исполняться при запуске Vagrant
 
 **1. Создаём виртуальную машину**  
   
-Использую Vagrantfile_ver0, который в репозитории    
+Использую Vagrantfile, который в репозитории    
   
   
 
 ```vagrant up ```  
 запускаем виртуальную машину  
   
-Будут созданы две виртуальные машины сервер с именем **_nfss_**, ip-адресом - **_192.168.56.10_** и клиент с именем **_nfsc_**, ip-адресом - **_192.168.56.11_**.  
 
 Заходим на сервер:  
-```vagrant ssh nfss```  
+```vagrant ssh rpm```  
 
 Внутри виртуалки переходим в root пользователя:  
 ```sudo -i```  
 
 Выполняю запуск утилиты script для записи действий в консоли:  
-```script lesson6_server.log```  
+```script lesson7.log```  
 
 **2. Настройка сервера**  
 
-Установка утилит:  
+Установка утилит для сборки пакетов и установки локального репозитория:  
 ```bash
-yum install nfs-utils
+yum install -y redhat-lsb-core wget rpmdevtools rpm-build createrepo yum-utils
 ```  
 
-- включаем firewall и проверяем, что он работает  
+**3. Создаем свой RPM пакет**  
+
+Для примера соберем пакет NGINX с поддержкой openssl  
+Загрузим SRPM пакет NGINX  
+```bash
+wget https://nginx.org/packages/centos/7/SRPMS/nginx-1.22.1-1.el7.ngx.src.rpm
+
+```
 
 ```bash
-systemctl enable firewalld.service --now
-systemctl status firewalld.service
+rpm -i nginx-1.22.1-1.el7.ngx.src.rpm
 ```
-- разрешаем в firewall доступ к сервисам NFS  
+
+скачаем и разархивируем последний исходники для openssl - он
+потребуется при сборке
+
 ```bash
-firewall-cmd --add-service="nfs3" \
-            --add-service="rpc-bind" \
-             --add-service="mountd" \
-             --permanent
-firewall-cmd --reload
+wget --no-check-certificate https://www.openssl.org/source/openssl-1.1.1s.tar.gz
+tar -xvf openssl-1.1.1s.tar.gz
 ```
-- включаем сервер NFS и проверяем статус  
+
+поставим все зависимости чтобы в процессе сборки не было ошибок  
 ```bash
-systemctl enable nfs --now
-systemctl status nfs
+yum-builddep rpmbuild/SPECS/nginx.spec
 ```
-- проверяем наличие слушаемых портов 2049/udp, 2049/tcp, 20048/udp, 20048/tcp, 111/udp, 111/tcp  
-```bash
-ss -tnplu
-```
-- создаём и настраиваем директорию, которая будет экспортирована в будущем  
-```bash
-mkdir -p /srv/share/upload
-chown -R nfsnobody:nfsnobody /srv/share
-chmod 0777 /srv/share/upload
-```
-- создаём в файле __/etc/exports__ структуру, которая позволит экспортировать ранее созданную директорию
-```bash
-cat << EOF > /etc/exports
-/srv/share 192.168.56.11/32(rw,sync,root_squash)
-EOF
-```
-- экспортируем ранее созданную директорию
-```bash
-exportfs -r
-```
-- проверяем экспортированную директорию следующей командой
-```bash
-exportfs -s
-```
+
 
 все вышеописаные команды записываю в скрипт **_nfss_script.sh_**
 
-**3. Настройка клиента**  
+
 
 Стартую script для записи действий в консоли:  
 ```script lesson6_client.log```  
