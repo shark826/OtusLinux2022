@@ -47,13 +47,13 @@ rpm -i nginx-1.22.1-1.el7.ngx.src.rpm
 дерево каталогов  
   
 
-└── rpmbuild
-    ├── BUILD
-    ├── BUILDROOT
-    ├── RPMS
-    ├── SOURCES
-    ├── SPECS
-    └── SRPMS
+└── rpmbuild  
+    ├── BUILD  
+    ├── BUILDROOT  
+    ├── RPMS  
+    ├── SOURCES  
+    ├── SPECS  
+    └── SRPMS  
   
 скачаем и разархивируем последний исходники для openssl - он
 потребуется при сборке
