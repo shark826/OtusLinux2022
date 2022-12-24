@@ -122,6 +122,7 @@ systemctl status nginx
 дек 24 17:26:16 rpm systemd[1]: Started nginx - high performance web server.
 ```
 
+
 все вышеописаные команды записываю в скрипт **_nfss_script.sh_**
 
 
