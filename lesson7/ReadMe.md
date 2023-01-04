@@ -123,6 +123,84 @@ systemctl status nginx
 ```
 
 
+**4. Создаем свой репозиторий и размещаем там ранее собранный RPM**
+
+Директория у NGINX по умолчанию /usr/share/nginx/html. Создадим там каталог repo:  
+
+```bash
+mkdir /usr/share/nginx/html/repo
+```
+
+Копируем туда наш собранный RPM и, например, RPM для установки jetty-server:  
+```bash
+cp rpmbuild/RPMS/x86_64/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm /usr/share/nginx/html/repo/
+wget http://mirror.centos.org/centos/7/os/x86_64/Packages/jetty-server-9.0.3-8.el7.noarch.rpm -O /usr/share/nginx/html/repo/jetty-server-9.0.3-8.el7.noarch.rpm
+```
+Проверим каталог нашего репозитория:  
+```bash
+ll /usr/share/nginx/html/repo
+
+total 2496
+-rw-r--r--. 1 root root  339016 июл  4  2014 jetty-server-9.0.3-8.el7.noarch.rpm
+-rw-r--r--. 1 root root 2208748 дек 24 19:34 nginx-1.22.1-1.el7.ngx.x86_64.rpm
+
+
+```
+Инициализируем репозиторий командой:  
+
+```bash
+createrepo /usr/share/nginx/html/repo/
+Spawning worker 0 with 2 pkgs
+Workers Finished
+Saving Primary metadata
+Saving file lists metadata
+Saving other metadata
+Generating sqlite DBs
+Sqlite DBs complete
+
+```
+
+Настроим в NGINX доступ к листингу каталога:  
+В  файле /etc/nginx/conf.d/default.conf добавим директиву _autoindex on_. В результате секция location будет выглядеть так:  
+```bash
+location / {
+root /usr/share/nginx/html;
+index index.html index.htm;
+autoindex on; 
+}
+```
+Проверяем синтаксис и перезапускаем NGINX:  
+```bash
+nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+nginx -s reload
+```
+
+Протестируем свой репозиторий  
+Добавим его в **/etc/yum.repos.d:**  
+```bash
+cat >> /etc/yum.repos.d/otus.repo << EOF
+[otus]
+name=otus-linux
+baseurl=http://localhost/repo
+gpgcheck=0
+enabled=1
+EOF
+```
+
+
+
+Убедимся что репозиторий подключился и посмотрим что в нем есть:  
+```bash
+yum repolist enabled | grep otus
+otus otus-linux 2
+
+yum list | grep otus
+nginx 1.14.1 otus
+jetty-server-9.0.3-8.el7 otus
+```
+
 все вышеописаные команды записываю в скрипт **_nfss_script.sh_**
 
 
@@ -133,23 +211,17 @@ systemctl status nginx
 
 все вышеописаные команды включаю в скрипт **_nfsc_script.sh_**
 
-**4. Удаление виртуальных машин и автоматизация стенда NFS**
+**4. Удаление виртуальных машин и автоматизация стенда RPM**
 
-Удаляю виртуалки
+Удаляю виртуалку
 
-```
-vagrant destroy nfss
-vagrant destroy nfsc
+```bash
+vagrant destroy rpm
 ```
 
-Добавляем в Vagrantfile_ver0 ссылки на скрипты
+Добавляем в Vagrantfile ссылку на скрипт  
 
-у сервера  
-```
-nfss.vm.provision "shell", path: "nfss_script.sh"
-```
-  
-у клиента  
+
 ```
 nfss.vm.provision "shell", path: "nfsc_script.sh"
 ```
