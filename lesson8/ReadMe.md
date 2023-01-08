@@ -34,6 +34,7 @@ mount -o remount,rw /
 
 Способ 2. **rd.break**  
 В конце строки начинающейся с *linux16* добавляем *rd.break* и нажимаем **сtrl-x** для загрузки в систему.  
+
 ![параметры загрузки](menu2_2.png)
 
 Попадаем в emergency mode. Наша корневая файловая система смонтирована (опять же в режиме Read-Only), но мы не в ней.  
@@ -61,56 +62,36 @@ touch /.autorelabel
 
 **2. Переименование VG**  
 
-Установка утилит:  
-```bash
-yum install nfs-utils
-```  
-
-- включаем firewall и проверяем, что он работает  
+посмотрим текущее состояние системы:  
 
 ```bash
-systemctl enable firewalld.service --now
-systemctl status firewalld.service
+vgs
 ```
-- разрешаем в firewall доступ к сервисам NFS  
+![LVM](shell_lvm1.png)
+
+Нас интересует вторая строка с именем Volume Group  
+Приступим к переименованию:  
 ```bash
-firewall-cmd --add-service="nfs3" \
-            --add-service="rpc-bind" \
-             --add-service="mountd" \
-             --permanent
-firewall-cmd --reload
+vgrename centos OtusRoot
 ```
-- включаем сервер NFS и проверяем статус  
+![LVM](shell_lvm2.png)
+
+
+правим [/etc/fstab](fstab), [/etc/default/grub](grub), [/boot/grub2/grub.cfg](grub.gfg). Везде заменяем старое
+название на новое. По ссылкам можно увидеть примеры получившихся файлов.
+
+Пересоздаем initrd image, чтобы он знал новое название Volume Group
 ```bash
-systemctl enable nfs --now
-systemctl status nfs
-```
-- проверяем наличие слушаемых портов 2049/udp, 2049/tcp, 20048/udp, 20048/tcp, 111/udp, 111/tcp  
-```bash
-ss -tnplu
-```
-- создаём и настраиваем директорию, которая будет экспортирована в будущем  
-```bash
-mkdir -p /srv/share/upload
-chown -R nfsnobody:nfsnobody /srv/share
-chmod 0777 /srv/share/upload
-```
-- создаём в файле __/etc/exports__ структуру, которая позволит экспортировать ранее созданную директорию
-```bash
-cat << EOF > /etc/exports
-/srv/share 192.168.56.11/32(rw,sync,root_squash)
-EOF
-```
-- экспортируем ранее созданную директорию
-```bash
-exportfs -r
-```
-- проверяем экспортированную директорию следующей командой
-```bash
-exportfs -s
+mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
 ```
 
-все вышеописаные команды записываю в скрипт **_nfss_script.sh_**
+![LVM](shell_lvm3.png)
+
+
+После чего можем перезагружаться и если все сделано правильно успешно грузимся с новым именем Volume Group и проверяем:  
+
+![LVM](shell_lvm4.png)
+
 
 **3. Настройка клиента**  
 
