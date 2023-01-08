@@ -93,79 +93,42 @@ mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
 ![LVM](shell_lvm4.png)
 
 
-**3. Настройка клиента**  
+**3. Добавить модуль в initrd**  
 
-переходим в режи root:  
+Скрипты модулей хранятся в каталоге /usr/lib/dracut/modules.d/. Для того чтобы добавить свой модуль создаем там папку с именем 01test:  
 ```bash
-su
+mkdir /usr/lib/dracut/modules.d/01test
 ```
+В нее поместим два скрипта:  
+1. [module-setup.sh](module-setup.sh) - который устанавливает модуль и вызывает скрипт test.sh  
+2. [test.sh](test.sh) - собственно сам вызываемый скрипт, в нём у нас рисуется пингвинчик  
 
-Стартую script для записи действий в консоли:  
-```script lesson6_client.log```  
-
-Так же как и на сервере сделаем установку утилит:  
+Пересобираем образ initrd  
 ```bash
-yum install nfs-utils -y
-```  
-
-- включаем firewall и проверяем, что он работает  
+mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
+```
+или  
+```bash
+dracut -f -v
+```
+Можно проверить/посмотреть какие модули загружены в образ:  
 
 ```bash
-systemctl enable firewalld.service --now
-systemctl status firewalld.service
+lsinitrd -m /boot/initramfs-$(uname -r).img | grep test
+test
 ```
+![initrd](initrd1.png)
+ 
+После чего можно пойти двумя путями для проверки:  
+Перезагрузиться и руками выключить опции **rghb** и **quiet** и увидеть вывод  
+Либо отредактировать grub.cfg убрав эти опции  
 
-- добавляем в _/etc/fstab_ строку_
-```
-echo "192.168.56.10:/srv/share/ /mnt nfs vers=3,proto=udp,noauto,x-systemd.automount 0 0" >> /etc/fstab
-```
-и выполняем
-```bash
-systemctl daemon-reload
-systemctl restart remote-fs.target
-```
-- заходим в директорию `/mnt/` и проверяем успешность монтирования
-```bash
-mount | grep mnt
-```
+Проверю первым способом  
 
-все вышеописаные команды включаю в скрипт **_nfsc_script.sh_**
+В итоге при загрузке будет пауза на 10 секунд и вы увидите пингвина в выводе
+терминала
 
 
-**4. Проверка работоспособности**
-
-- заходим на сервер
-- заходим в каталог `/srv/share/upload`
-- создаём тестовый файл `touch check_file`
-![Создаём тестовый файл](server.png)
-- заходим на клиент
-- заходим в каталог `/mnt/upload`
-- проверяем наличие ранее созданного файла
-- создаём тестовый файл `touch client_file`
-- проверяем, что файл успешно создан
-![Клиент тестовый файл](client.png)
-
-**5. Удаление виртуальных машин и автоматизация стенда NFS**
-
-Удаляю виртуалки
-
-```
-vagrant destroy nfss
-vagrant destroy nfsc
-```
-
-Добавляем в Vagrantfile_ver0 ссылки на скрипты
-
-у сервера  
-```
-nfss.vm.provision "shell", path: "nfss_script.sh"
-```
-  
-у клиента  
-```
-nfss.vm.provision "shell", path: "nfsc_script.sh"
-```
-
-переименовываю файл Vagrantfile_ver0 в Vagrantfile для старта автоматизированного стенда
+![initrd](initrd2.png)
 
 
