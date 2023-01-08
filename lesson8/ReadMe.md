@@ -117,7 +117,7 @@ dracut -f -v
 lsinitrd -m /boot/initramfs-$(uname -r).img | grep test
 test
 ```
-![initrd](iinitrd1.png)
+![initrd](iintrd1.png)
  
 После чего можно пойти двумя путями для проверки:  
 Перезагрузиться и руками выключить опции **rghb** и **quiet** и увидеть вывод  
@@ -129,6 +129,6 @@ test
 терминала
 
 
-![initrd](iinitrd2.png)
+![initrd](iintrd2.png)
 
 
