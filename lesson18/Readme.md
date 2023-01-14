@@ -52,8 +52,21 @@ docker push shark826/nginx-otus:1
 ```bash
 docker run -d -p 80:80 --name ngotus shark826/nginx-otus:1
 ```
-октройте http://localhost и увидим измененую страницу  NGINX
+октройте http://localhost и увидим измененую страницу  NGINX  
 
+![NGINX](nginxotus.png)  
+  
+  
+либо по команде  
+```bash
+curl localhost
+```
+в конце увиди добавленные строки
 
-![NGINX](nginxotus.png)
+```bash
+<p></p>
+<h1>Administrator Linux. Professional!</h1>
+<p></p>
+<img src="logo.svg" alt="logo-otus-ny" />
+```
 
