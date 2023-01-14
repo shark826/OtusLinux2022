@@ -61,7 +61,7 @@ docker run -d -p 80:80 --name ngotus shark826/nginx-otus:1
 ```bash
 curl localhost
 ```
-в конце увиди добавленные строки
+в конце увидим добавленные строки
 
 ```bash
 <p></p>
