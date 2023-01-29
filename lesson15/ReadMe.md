@@ -19,7 +19,11 @@
 ```vagrant ssh```  
 
 Внутри виртуалки переходим в root пользователя:  
-```sudo -i```  
+```su```  
+обновим систему:  
+
+```apt update && apt dist-upgrade -y```  
+
 
 **2. Установка и нстройка Ansible**  
 
@@ -27,9 +31,30 @@
 
 Добавим репозиторий Ansible 
 ```deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main```  
+установим ключи от репозитория, обновим кэш пакетов и установим Ansible  
 
 ```bash
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
 sudo apt-get update
 sudo apt-get install ansible
+```
+
+
+< если при добавлении ключа выйдет ошибка:  
+< E: gnupg, gnupg2 and gnupg1 do not seem to be installed, but one of them is required for this operation  
+< то нужно проинсталировать пакеты **gnupg, gnupg2 and gnupg1**
+
+после успешной установки, проверим версию Ansible
+
+```ansible --version```
+
+на экран выйдет информация:  
+
+```bash
+ansible 2.10.8
+  config file = None
+  configured module search path = ['/root/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 3.9.2 (default, Feb 28 2021, 17:03:44) [GCC 10.2.1 20210110]
 ```
