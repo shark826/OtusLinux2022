@@ -23,7 +23,7 @@
 
 **2. Установка и нстройка Ansible**  
 
-Так как мной был выбран дистрибутив Debian, то инсталяция описана по (ссылке)[https://docs.ansible.com/ansible/2.7/installation_guide/intro_installation.html#latest-releases-via-apt-debian] из офицальной документцаии.  
+Так как мной был выбран дистрибутив Debian, то инсталяция описана по [ссылке](https://docs.ansible.com/ansible/2.7/installation_guide/intro_installation.html#latest-releases-via-apt-debian) из офицальной документцаии.  
 
 Добавим репозиторий Ansible 
 ```deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main```  
