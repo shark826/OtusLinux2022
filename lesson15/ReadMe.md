@@ -29,7 +29,7 @@
 
 Так как мной был выбран дистрибутив Debian, то инсталяция описана по [ссылке](https://docs.ansible.com/ansible/2.7/installation_guide/intro_installation.html#latest-releases-via-apt-debian) из офицальной документцаии.  
 
-Добавим репозиторий Ansible 
+Добавим репозиторий Ansible  
 ```deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main```  
 установим ключи от репозитория, обновим кэш пакетов и установим Ansible  
 
@@ -40,9 +40,9 @@ sudo apt-get install ansible
 ```
 
 
-< если при добавлении ключа выйдет ошибка:  
-< E: gnupg, gnupg2 and gnupg1 do not seem to be installed, but one of them is required for this operation  
-< то нужно проинсталировать пакеты **gnupg, gnupg2 and gnupg1**
+> если при добавлении ключа выйдет ошибка:  
+> E: gnupg, gnupg2 and gnupg1 do not seem to be installed, but one of them is required for this operation  
+> то нужно проинсталировать пакеты **gnupg, gnupg2 and gnupg1**
 
 после успешной установки, проверим версию Ansible
 
