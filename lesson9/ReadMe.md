@@ -6,7 +6,7 @@
   
 **Создаём виртуальную машину**  
   
-Использую _Vagrantfile_, который в репозитории  и файл скрипт _sysd_script.sh_, который установит необходимые пакеты для выполнения ДЗ   
+Использую _Vagrantfile_, который в репозитории  и файл скрипт _[sysd_script.sh](sysd_script.sh)_, который установит необходимые пакеты для выполнения ДЗ   
   
 ```vagrant up ```  
 запускаем виртуальную машину  
@@ -115,6 +115,10 @@ Feb 12 11:41:08 sysd-less9 systemd: Starting My watchlog service...
 Feb 12 11:41:08 sysd-less9 root: Sun Feb 12 11:41:48 UTC 2023: I found word, Master!
 Feb 12 11:41:08 sysd-less9 systemd: Started My watchlog service.
 ```
+
+### Часть 2. Из epel установить spawn-fcgi и переписать init-скрипт на unit-файл.
+
+
 
 - заходим в директорию `/mnt/` и проверяем успешность монтирования
 ```bash
