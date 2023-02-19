@@ -204,9 +204,35 @@ Feb 19 08:36:41 sysd-less9 systemd[1]: Started Spawn-fcgi startup service by Otu
 
 ### Часть 3. Дополнить юнит-файл apache httpd возможностью запустить несколько инстансов сервера с разными конфигами
 
+Для запуска нескольких экземпляров сервиса будем использовать шаблон в конфигурации файла окружения, который находится в каталоге /usr/lib/systemd/system. Файл называется httpd.service, переименуем его в httpd@service.  
+В строке EnvironmentFile=/etc/sysconfig/httpd-%i добавим спецификатор %i для подстановки имён инстансов.  
 
-unit
+```bash
+cat /usr/lib/systemd/system/httpd@.service 
 
+[Unit]
+Description=The Apache HTTP Server
+After=network.target remote-fs.target nss-lookup.target
+Documentation=man:httpd(8)
+Documentation=man:apachectl(8)
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/httpd-%i 
+ExecStart=/usr/sbin/httpd $OPTIONS -DFOREGROUND
+ExecReload=/usr/sbin/httpd $OPTIONS -k graceful
+ExecStop=/bin/kill -WINCH ${MAINPID}
+# We want systemd to give httpd some time to finish gracefully, but still want
+# it to kill httpd after TimeoutStopSec if something went wrong during the
+# graceful stop. Normally, Systemd sends SIGTERM signal right after the
+# ExecStop, which would kill httpd. We are sending useless SIGCONT here to give
+# httpd time to finish.
+KillSignal=SIGCONT
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+```
 
 В каталоге /etc/sysconfig создаём два файла окружения httpd-first и httpd-second, в которых задается опция для запуска веб-сервера с необходимым конфигурационным файлом:  
 
@@ -276,7 +302,7 @@ LANG=C
 
 В каталоге с конфигурацией httpd /etc/httpd/conf создаем два файла конфигурации first.conf и second.conf. В каждом из них сменим порт сервера  и путь к PidFile. В конфигурационном файле first.conf оставляем порт по умолчанию 80 и прописываем путь до пид-файла /var/run/httpd-first.pid. В файле second.conf порт меняем на 8080 и путь до пид-файла на /var/run/httpd-second.pid.  
 
-< ниже приведены только измененые строки в дефолтном конфиге
+> ниже приведены только измененые строки в дефолтном конфиге  
 
 ```bash
 cat /etc/httpd/conf/first.conf
@@ -292,5 +318,17 @@ cat /etc/httpd/conf/second.conf
 PidFile /var/run/httpd-second.pid
 Listen 8080
 
+```
+
+Запустим и проверим работу:  
+
+```bash
+systemctl start httpd@first.service
+systemctl start httpd@second.service
+ss -tnulp | grep httpd
+
+tcp    LISTEN     0      128    [::]:8080               [::]:*                   users:(("httpd",pid=1130,fd=4),("httpd",pid=1129,fd=4),("httpd",pid=1128,fd=4),("httpd",pid=1127,fd=4),"httpd",pid=1126,fd=4),("httpd",pid=1125,fd=4),("httpd",pid=1124,fd=4))
+tcp    LISTEN     0      128    [::]:80                 [::]:*                   users:(("httpd",pid=1083,fd=4),("httpd",pid=1082,fd=4),("httpd",pid=1081,fd=4),
+("httpd",pid=1080,fd=4),("httpd",pid=1079,fd=4),("httpd",pid=1078,fd=4),("httpd",pid=1077,fd=4))
 ```
 
