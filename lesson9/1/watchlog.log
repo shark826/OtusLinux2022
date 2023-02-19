@@ -1,0 +1,11 @@
+tart-Date: 2023-02-02  20:28:14
+Commandline: packagekit role='update-packages'
+ALERT
+ALERT
+Install: docker-compose-plugin
+Upgrade: docker-ce-cli:amd64
+End-Date: 2023-02-02  20:28:22
+
+
+ALERT
+ALERT

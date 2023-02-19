@@ -328,7 +328,6 @@ systemctl start httpd@second.service
 ss -tnulp | grep httpd
 
 tcp    LISTEN     0      128    [::]:8080               [::]:*                   users:(("httpd",pid=1130,fd=4),("httpd",pid=1129,fd=4),("httpd",pid=1128,fd=4),("httpd",pid=1127,fd=4),"httpd",pid=1126,fd=4),("httpd",pid=1125,fd=4),("httpd",pid=1124,fd=4))
-tcp    LISTEN     0      128    [::]:80                 [::]:*                   users:(("httpd",pid=1083,fd=4),("httpd",pid=1082,fd=4),("httpd",pid=1081,fd=4),
-("httpd",pid=1080,fd=4),("httpd",pid=1079,fd=4),("httpd",pid=1078,fd=4),("httpd",pid=1077,fd=4))
+tcp    LISTEN     0      128    [::]:80                 [::]:*                   users:(("httpd",pid=1083,fd=4),("httpd",pid=1082,fd=4),("httpd",pid=1081,fd=4),("httpd",pid=1080,fd=4),("httpd",pid=1079,fd=4),("httpd",pid=1078,fd=4),("httpd",pid=1077,fd=4))
 ```
 
