@@ -205,5 +205,92 @@ Feb 19 08:36:41 sysd-less9 systemd[1]: Started Spawn-fcgi startup service by Otu
 ### Часть 3. Дополнить юнит-файл apache httpd возможностью запустить несколько инстансов сервера с разными конфигами
 
 
+unit
 
+
+В каталоге /etc/sysconfig создаём два файла окружения httpd-first и httpd-second, в которых задается опция для запуска веб-сервера с необходимым конфигурационным файлом:  
+
+```bash
+cat /etc/sysconfig/httpd-first 
+
+#
+# This file can be used to set additional environment variables for
+# the httpd process, or pass additional options to the httpd
+# executable.
+#
+# Note: With previous versions of httpd, the MPM could be changed by
+# editing an "HTTPD" variable here.  With the current version, that
+# variable is now ignored.  The MPM is a loadable module, and the
+# choice of MPM can be changed by editing the configuration file
+# /etc/httpd/conf.modules.d/00-mpm.conf.
+# 
+
+#
+# To pass additional options (for instance, -D definitions) to the
+# httpd binary at startup, set OPTIONS here.
+#
+OPTIONS="-f /etc/httpd/conf/first.conf"
+
+#
+# This setting ensures the httpd process is started in the "C" locale
+# by default.  (Some modules will not behave correctly if
+# case-sensitive string comparisons are performed in a different
+# locale.)
+#
+LANG=C
+
+```
+
+```bash
+cat /etc/sysconfig/httpd-second
+
+#
+# This file can be used to set additional environment variables for
+# the httpd process, or pass additional options to the httpd
+# executable.
+#
+# Note: With previous versions of httpd, the MPM could be changed by
+# editing an "HTTPD" variable here.  With the current version, that
+# variable is now ignored.  The MPM is a loadable module, and the
+# choice of MPM can be changed by editing the configuration file
+# /etc/httpd/conf.modules.d/00-mpm.conf.
+# 
+
+#
+# To pass additional options (for instance, -D definitions) to the
+# httpd binary at startup, set OPTIONS here.
+#
+OPTIONS="-f /etc/httpd/conf/second.conf"
+
+#
+# This setting ensures the httpd process is started in the "C" locale
+# by default.  (Some modules will not behave correctly if
+# case-sensitive string comparisons are performed in a different
+# locale.)
+#
+LANG=C
+
+
+```
+
+
+В каталоге с конфигурацией httpd /etc/httpd/conf создаем два файла конфигурации first.conf и second.conf. В каждом из них сменим порт сервера  и путь к PidFile. В конфигурационном файле first.conf оставляем порт по умолчанию 80 и прописываем путь до пид-файла /var/run/httpd-first.pid. В файле second.conf порт меняем на 8080 и путь до пид-файла на /var/run/httpd-second.pid.  
+
+< ниже приведены только измененые строки в дефолтном конфиге
+
+```bash
+cat /etc/httpd/conf/first.conf
+
+PidFile /var/run/httpd-first.pid
+Listen 80
+
+```
+
+```bash
+cat /etc/httpd/conf/second.conf 
+
+PidFile /var/run/httpd-second.pid
+Listen 8080
+
+```
 
