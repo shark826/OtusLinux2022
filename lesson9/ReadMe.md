@@ -6,7 +6,7 @@
   
 **Создаём виртуальную машину**  
   
-Использую _Vagrantfile_, который в репозитории  и файл скрипт _[sysd_script.sh](sysd_script.sh)_, который установит необходимые пакеты для выполнения ДЗ   
+Использую _[Vagrantfile](Vagrantfile)_, который в репозитории  и файл скрипт _[sysd_script.sh](sysd_script.sh)_, который установит необходимые пакеты для выполнения ДЗ   
   
 ```vagrant up ```  
 запускаем виртуальную машину  
@@ -119,49 +119,91 @@ Feb 12 11:41:08 sysd-less9 systemd: Started My watchlog service.
 ### Часть 2. Из epel установить spawn-fcgi и переписать init-скрипт на unit-файл.
 
 
-
-- заходим в директорию `/mnt/` и проверяем успешность монтирования
+Приводим файл /etc/sysconfig/spawn-fcgi к след виду:  
 ```bash
-mount | grep mnt
+cat /etc/sysconfig/spawn-fcgi
+
+# You must set some working options before the "spawn-fcgi" service will work.
+# If SOCKET points to a file, then this file is cleaned up by the init script.
+#
+# See spawn-fcgi(1) for all possible options.
+#
+# Example :
+SOCKET=/var/run/php-fcgi.sock
+OPTIONS="-u apache -g apache -s $SOCKET -S -M 0600 -C 32 -F 1 -- /usr/bin/php-cgi"
 ```
 
-все вышеописаные команды включаю в скрипт **_nfsc_script.sh_**
+В каталоге /etc/systemd/system создаём юнит-файл spawn-fcgi.service:  
 
+```bash
+cat /etc/systemd/system/spawn-fcgi.service
 
-**4. Проверка работоспособности**
+[Unit]
+Description=Spawn-fcgi startup service by Otus
+After=network.target
 
-- заходим на сервер
-- заходим в каталог `/srv/share/upload`
-- создаём тестовый файл `touch check_file`
-![Создаём тестовый файл](server.png)
-- заходим на клиент
-- заходим в каталог `/mnt/upload`
-- проверяем наличие ранее созданного файла
-- создаём тестовый файл `touch client_file`
-- проверяем, что файл успешно создан
-![Клиент тестовый файл](client.png)
+[Service]
+Type=simple
+PIDFile=/var/run/spawn-fcgi.pid
+EnvironmentFile=/etc/sysconfig/spawn-fcgi
+ExecStart=/usr/bin/spawn-fcgi -n $OPTIONS
+KillMode=process
 
-**5. Удаление виртуальных машин и автоматизация стенда NFS**
-
-Удаляю виртуалки
-
-```
-vagrant destroy nfss
-vagrant destroy nfsc
+[Install]
+WantedBy=multi-user.target
 ```
 
-Добавляем в Vagrantfile_ver0 ссылки на скрипты
+Убеждаемся что все успешно работает:  
 
-у сервера  
-```
-nfss.vm.provision "shell", path: "nfss_script.sh"
-```
-  
-у клиента  
-```
-nfss.vm.provision "shell", path: "nfsc_script.sh"
+```bash
+systemctl start spawn-fcgi
+
+systemctl status spawn-fcgi
+● spawn-fcgi.service - Spawn-fcgi startup service by Otus
+   Loaded: loaded (/etc/systemd/system/spawn-fcgi.service; disabled; vendor preset: disabled)
+   Active: active (running) since Sun 2023-02-19 08:36:41 UTC; 9s ago
+ Main PID: 2542 (php-cgi)
+   CGroup: /system.slice/spawn-fcgi.service
+           ├─2542 /usr/bin/php-cgi
+           ├─2543 /usr/bin/php-cgi
+           ├─2544 /usr/bin/php-cgi
+           ├─2545 /usr/bin/php-cgi
+           ├─2546 /usr/bin/php-cgi
+           ├─2547 /usr/bin/php-cgi
+           ├─2548 /usr/bin/php-cgi
+           ├─2549 /usr/bin/php-cgi
+           ├─2550 /usr/bin/php-cgi
+           ├─2551 /usr/bin/php-cgi
+           ├─2552 /usr/bin/php-cgi
+           ├─2553 /usr/bin/php-cgi
+           ├─2554 /usr/bin/php-cgi
+           ├─2555 /usr/bin/php-cgi
+           ├─2556 /usr/bin/php-cgi
+           ├─2557 /usr/bin/php-cgi
+           ├─2558 /usr/bin/php-cgi
+           ├─2559 /usr/bin/php-cgi
+           ├─2560 /usr/bin/php-cgi
+           ├─2561 /usr/bin/php-cgi
+           ├─2562 /usr/bin/php-cgi
+           ├─2563 /usr/bin/php-cgi
+           ├─2564 /usr/bin/php-cgi
+           ├─2565 /usr/bin/php-cgi
+           ├─2566 /usr/bin/php-cgi
+           ├─2567 /usr/bin/php-cgi
+           ├─2568 /usr/bin/php-cgi
+           ├─2569 /usr/bin/php-cgi
+           ├─2570 /usr/bin/php-cgi
+           ├─2571 /usr/bin/php-cgi
+           ├─2572 /usr/bin/php-cgi
+           ├─2573 /usr/bin/php-cgi
+           └─2574 /usr/bin/php-cgi
+
+Feb 19 08:36:41 sysd-less9 systemd[1]: Started Spawn-fcgi startup service by Otus.
+
 ```
 
-переименовываю файл Vagrantfile_ver0 в Vagrantfile для старта автоматизированного стенда
+### Часть 3. Дополнить юнит-файл apache httpd возможностью запустить несколько инстансов сервера с разными конфигами
+
+
 
 
