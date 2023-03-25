@@ -186,8 +186,6 @@ enabled=1
 EOF
 ```
 
-
-
 Убедимся что репозиторий подключился и посмотрим что в нем есть:  
 ```bash
 yum repolist enabled | grep otus
