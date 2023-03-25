@@ -21,9 +21,6 @@
 Внутри виртуалки переходим в root пользователя:  
 ```sudo -i```  
 
-Выполняю запуск утилиты script для записи действий в консоли:  
-```script lesson7.log```  
-
 **2. Настройка сервера**  
 
 Установка утилит для сборки пакетов и установки локального репозитория:  
@@ -102,7 +99,7 @@ total 4128
 
 Устанавливаем пакет и убедимся что nginx работает
 ```bash
-yum localinstall -y \rpmbuild/RPMS/x86_64/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm
+yum localinstall -y \rpmbuild/RPMS/x86_64/nginx-1.22.1-1.el7.ngx.x86_64.rpm
 systemctl start nginx
 systemctl status nginx
 ```
@@ -133,7 +130,7 @@ mkdir /usr/share/nginx/html/repo
 
 Копируем туда наш собранный RPM и, например, RPM для установки jetty-server:  
 ```bash
-cp rpmbuild/RPMS/x86_64/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm /usr/share/nginx/html/repo/
+cp rpmbuild/RPMS/x86_64/nginx-1.22.1-1.el7.ngx.x86_64.rpm /usr/share/nginx/html/repo/
 wget http://mirror.centos.org/centos/7/os/x86_64/Packages/jetty-server-9.0.3-8.el7.noarch.rpm -O /usr/share/nginx/html/repo/jetty-server-9.0.3-8.el7.noarch.rpm
 ```
 Проверим каталог нашего репозитория:  
@@ -200,30 +197,8 @@ yum list | grep otus
 nginx 1.14.1 otus
 jetty-server-9.0.3-8.el7 otus
 ```
-
-все вышеописаные команды записываю в скрипт **_nfss_script.sh_**
-
-
-
-Стартую script для записи действий в консоли:  
-```script lesson6_client.log```  
-
-
-все вышеописаные команды включаю в скрипт **_nfsc_script.sh_**
-
-**4. Удаление виртуальных машин и автоматизация стенда RPM**
-
-Удаляю виртуалку
-
+Установим репозиторий percona-release:  
 ```bash
-vagrant destroy rpm
+yum install percona-release -y
 ```
-
-Добавляем в Vagrantfile ссылку на скрипт  
-
-
-```
-nfss.vm.provision "shell", path: "nfsc_script.sh"
-```
-
 
