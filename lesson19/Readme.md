@@ -100,3 +100,31 @@ Enforcing
 
 
 ![проверка фаервол нгинкс и селинукс](Screenshot_2.png)  
+
+**2.1 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью переключателей setsebool**  
+
+Находим в логах (/var/log/audit/audit.log) информацию о блокировании нашего нестандартного порта 4881  
+```bash
+cat /var/log/audit/audit.log | grep 4881
+```
+![блокировка порта4881](Screenshot_3.png)  
+
+Копируем метку времени, чтобы посмотреть информацию о запрете, с помощью утилиты audit2why (нужно установить дополнительно пакет policycoreutils-python)  
+
+```bash
+grep 1681145568.354:815 /var/log/audit/audit.log | audit2why
+type=AVC msg=audit(1681145568.354:815): avc:  denied  { name_bind } for  pid=2826 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket permissive=0
+
+        Was caused by:
+        The boolean nis_enabled was set incorrectly. 
+        Description:
+        Allow nis to enabled
+
+        Allow access by executing:
+        # setsebool -P nis_enabled 1
+```
+
+Утилита audit2why покажет почему трафик блокируется. Исходя из вывода утилиты, мы видим, что нам нужно поменять параметр nis_enabled.  
+Включим параметр nis_enabled и перезапустим nginx: *setsebool -P nis_enabled on*  
+
+![Включим параметр nis_enabled](Screenshot_4.png)  
