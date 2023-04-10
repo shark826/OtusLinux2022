@@ -72,3 +72,31 @@ SELinux следует модели минимально необходимых 
 
 
 **2. Запуск nginx на нестандартном порту 3-мя разными способами**  
+
+Проверим статус файервола:  
+
+```bash
+systemctl status firewalld.service 
+● firewalld.service - firewalld - dynamic firewall daemon
+   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+     Docs: man:firewalld(1)
+```
+Файервол загружен, но выключен  
+
+Также можно проверить, что конфигурация nginx настроена без ошибок:  
+```bash
+nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```  
+Далее проверим режим работы SELinux: getenforce  
+```bash
+getenforce
+Enforcing
+```  
+
+Должен отображаться режим *Enforcing*. Данный режим означает, что SELinux будет блокировать запрещенную активность.
+
+
+![проверка фаервол нгинкс и селинукс](Screenshot_2.png)  
