@@ -128,3 +128,7 @@ type=AVC msg=audit(1681145568.354:815): avc:  denied  { name_bind } for  pid=282
 Включим параметр nis_enabled и перезапустим nginx: *setsebool -P nis_enabled on*  
 
 ![Включим параметр nis_enabled](Screenshot_4.png)  
+
+Также можно проверить работу nginx из браузера по адресу http://127.0.0.1:4881  
+
+![test1](Screenshot_5.png)  
