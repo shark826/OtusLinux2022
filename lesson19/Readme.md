@@ -32,10 +32,33 @@ SELinux следует модели минимально необходимых 
 
 Написать политику SELinux достаточно сложно, но для ключевых приложений и сервисов (например httpd, mysqld, dhcpd и т. д.)
 определены заранее сконфигурированные политики, которые не позволят получить злоумышленнику доступ к важным данным.
-Те приложения, для которых политика не определена, выполняются в домене unconfined_f и не защищаются SELinux.
+Те приложения, для которых политика не определена, выполняются в домене *unconfined_f* и не защищаются SELinux.
 
 
 
 **1. Запуск стенда с Vagrantfile**  
 
-![Vagrantfile](Vagrantfile)
+Запускаем виртуальную машину с готовым [Vagrantfile](Vagrantfile), Порт TCP 4881 уже проброшен до хоста. SELinux включен.  
+
+Во время развёртывания стенда попытка запустить nginx завершится с
+ошибкой:
+
+```bash
+
+    selinux: ● nginx.service - The nginx HTTP and reverse proxy server
+    selinux:    Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+    selinux:    Active: failed (Result: exit-code) since Mon 2023-04-10 16:52:48 UTC; 10ms ago
+    selinux:   Process: 2826 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=1/FAILURE)
+    selinux:   Process: 2825 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+    selinux: 
+    selinux: Apr 10 16:52:48 selinux systemd[1]: Starting The nginx HTTP and reverse proxy server...
+    selinux: Apr 10 16:52:48 selinux nginx[2826]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok                                                                                                      
+    selinux: Apr 10 16:52:48 selinux nginx[2826]: nginx: [emerg] bind() to 0.0.0.0:4881 failed (13: Permission denied)                                                                                                  
+    selinux: Apr 10 16:52:48 selinux nginx[2826]: nginx: configuration file /etc/nginx/nginx.conf test failed                                                                                                           
+    selinux: Apr 10 16:52:48 selinux systemd[1]: nginx.service: control process exited, code=exited status=1
+    selinux: Apr 10 16:52:48 selinux systemd[1]: Failed to start The nginx HTTP and reverse proxy server.
+    selinux: Apr 10 16:52:48 selinux systemd[1]: Unit nginx.service entered failed state.
+    selinux: Apr 10 16:52:48 selinux systemd[1]: nginx.service failed.
+    
+```
+![Ошибка при старте виртуально машины](Screenshot_1.png)
