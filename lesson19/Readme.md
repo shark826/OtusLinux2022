@@ -132,3 +132,17 @@ type=AVC msg=audit(1681145568.354:815): avc:  denied  { name_bind } for  pid=282
 Также можно проверить работу nginx из браузера по адресу http://127.0.0.1:4881  
 
 ![test1](Screenshot_5.png)  
+
+
+Проверить статус параметра можно с помощью команды: *getsebool -a | grep nis_enabled*  
+```bash
+[root@selinux ~]# getsebool -a | grep nis_enabled
+nis_enabled --> on
+[root@selinux ~]#
+```
+Вернём запрет работы nginx на порту 4881 обратно. Для этого отключим nis_enabled: *setsebool -P nis_enabled off*  
+
+После отключения nis_enabled служба nginx снова не запустится.  
+
+
+![crachnginx2](Screenshot_6.png)  
