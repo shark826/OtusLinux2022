@@ -146,3 +146,7 @@ nis_enabled --> on
 
 
 ![crachnginx2](Screenshot_6.png)  
+
+
+**2.2 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью добавления нестандартного порта в имеющийся тип**  
+
