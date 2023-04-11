@@ -186,3 +186,40 @@ systemctl status nginx
 
 **2.3 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью формирования и установки модуля SELinux:**  
 
+Попробуем снова запустить nginx: *systemctl start nginx*  
+
+```bash
+[root@selinux ~]# systemctl start nginx
+Job for nginx.service failed because the control process exited with error code. See "systemctl status nginx.service" and "journalctl -xe" for details.
+```  
+
+Nginx не запуститься, так как SELinux продолжает его блокировать.  
+Посмотрим логи SELinux, которые относятся к nginx:  
+
+```bash
+[root@selinux ~]# grep nginx /var/log/audit/audit.log
+...........
+type=SYSCALL msg=audit(1681217155.575:1728): arch=c000003e syscall=49 success=no exit=-13 a0=6 a1=55f31d6ba778 a2=10 a3=7ffc37535190 items=0 ppid=1 pid=5036 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0
+sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="nginx" exe="/usr/sbin/nginx" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=SERVICE_START msg=audit(1681217155.577:1729): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=nginx comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+[root@selinux ~]#
+```
+Воспользуемся утилитой audit2allow для того, чтобы на основе логов SELinux сделать модуль, разрешающий работу nginx на нестандартном порту:  
+*grep nginx /var/log/audit/audit.log | audit2allow -M nginx*  
+
+```bash
+[root@selinux ~]# grep nginx /var/log/audit/audit.log | audit2allow -M nginx
+******************** IMPORTANT ***********************
+To make this policy package active, execute:
+
+semodule -i nginx.pp
+
+[root@selinux ~]#
+```  
+
+audit2allow сформировал модуль, и сообщил нам команду, с помощью которой можно применить данный модуль: *semodule -i nginx.pp*  
+
+Попробуем снова запустить nginx и проверим статус работы : *systemctl start nginx  && systemctl status nginx*  
+
+
+![nginx4](./img/Screenshot_11.png)  
