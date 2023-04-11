@@ -63,7 +63,7 @@ SELinux следует модели минимально необходимых 
 ```
   
   
-![Ошибка при старте виртуально машины](Screenshot_1.png)  
+![Ошибка при старте виртуально машины](./img/Screenshot_1.png)  
 
 Данная ошибка появляется из-за того, что SELinux блокирует работу nginx на нестандартном порту.  
 
@@ -99,7 +99,7 @@ Enforcing
 Должен отображаться режим *Enforcing*. Данный режим означает, что SELinux будет блокировать запрещенную активность.
 
 
-![проверка фаервол нгинкс и селинукс](Screenshot_2.png)  
+![проверка фаервол нгинкс и селинукс](./img/Screenshot_2.png)  
 
 **2.1 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью переключателей setsebool**  
 
@@ -107,7 +107,7 @@ Enforcing
 ```bash
 cat /var/log/audit/audit.log | grep 4881
 ```
-![блокировка порта4881](Screenshot_3.png)  
+![блокировка порта4881](./img/Screenshot_3.png)  
 
 Копируем метку времени, чтобы посмотреть информацию о запрете, с помощью утилиты audit2why (нужно установить дополнительно пакет policycoreutils-python)  
 
@@ -127,11 +127,11 @@ type=AVC msg=audit(1681145568.354:815): avc:  denied  { name_bind } for  pid=282
 Утилита audit2why покажет почему трафик блокируется. Исходя из вывода утилиты, мы видим, что нам нужно поменять параметр nis_enabled.  
 Включим параметр nis_enabled и перезапустим nginx: *setsebool -P nis_enabled on*  
 
-![Включим параметр nis_enabled](Screenshot_4.png)  
+![Включим параметр nis_enabled](./img/Screenshot_4.png)  
 
 Также можно проверить работу nginx из браузера по адресу http://127.0.0.1:4881  
 
-![test1](Screenshot_5.png)  
+![test1](./img/Screenshot_5.png)  
 
 
 Проверить статус параметра можно с помощью команды: *getsebool -a | grep nis_enabled*  
@@ -145,7 +145,7 @@ nis_enabled --> on
 После отключения nis_enabled служба nginx снова не запустится.  
 
 
-![crachnginx2](Screenshot_6.png)  
+![crachnginx2](./img/Screenshot_6.png)  
 
 
 **2.2 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью добавления нестандартного порта в имеющийся тип**  
@@ -163,15 +163,15 @@ pegasus_https_port_t           tcp      5989
 
 Посмотрим появился ли наш нестандартный порт:  
 
-![port1](Screenshot_7.png)  
+![port1](./img/Screenshot_7.png)  
 
 Теперь перезапустим службу nginx и проверим её работу:  
 
-![nginx2](Screenshot_8.png)  
+![nginx2](./img/Screenshot_8.png)  
 
 Заново проверим работу nginx из браузера по адресу http://127.0.0.1:4881  
 
-![test2](Screenshot_9.png)  
+![test2](./img/Screenshot_9.png)  
 
 Удалим нестандартный порт, перезапустим nginx и убедимся, что он снова "сломался"  
 
@@ -182,7 +182,7 @@ systemctl restart nginx
 systemctl status nginx
 ```  
 
-![nginx3](Screenshot_10.png)  
+![nginx3](./img/Screenshot_10.png)  
 
 **2.3 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью формирования и установки модуля SELinux:**  
 
