@@ -173,3 +173,16 @@ pegasus_https_port_t           tcp      5989
 
 ![test2](Screenshot_9.png)  
 
+Удалим нестандартный порт, перезапустим nginx и убедимся, что он снова "сломался"  
+
+```bash
+semanage port -d -t http_port_t -p tcp 4881
+semanage port -l | grep http_port_t
+systemctl restart nginx
+systemctl status nginx
+```  
+
+![nginx3](Screenshot_10.png)  
+
+**2.3 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью формирования и установки модуля SELinux:**  
+
