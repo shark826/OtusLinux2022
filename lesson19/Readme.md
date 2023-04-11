@@ -151,3 +151,25 @@ nis_enabled --> on
 **2.2 Разрешим в SELinux работу nginx на порту TCP 4881 c помощью добавления нестандартного порта в имеющийся тип**  
 
 Поиск имеющегося типа, для http трафика: *semanage port -l | grep http*  
+```bash
+[root@selinux ~]# semanage port -l | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+```  
+Добавим порт в тип http_port_t: *semanage port -a -t http_port_t -p tcp 4881*  
+
+Посмотрим появился ли наш нестандартный порт:  
+
+![port1](Screenshot_7.png)  
+
+Теперь перезапустим службу nginx и проверим её работу:  
+
+![nginx2](Screenshot_8.png)  
+
+Заново проверим работу nginx из браузера по адресу http://127.0.0.1:4881  
+
+![test2](Screenshot_9.png)  
+
