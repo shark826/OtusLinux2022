@@ -223,3 +223,14 @@ audit2allow сформировал модуль, и сообщил нам ком
 
 
 ![nginx4](./img/Screenshot_11.png)  
+
+После добавления модуля nginx запустился без ошибок. При использовании модуля изменения сохранятся после перезагрузки.  
+Просмотр всех установленных модулей: *semodule -l*  
+Для удаления модуля воспользуемся командой: *semodule -r nginx*  
+
+```bash
+[root@selinux ~]# semodule -r nginx
+libsemanage.semanage_direct_remove_key: Removing last nginx module (no other nginx module exists at another priority).
+[root@selinux ~]#
+```
+
