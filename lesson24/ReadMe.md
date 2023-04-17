@@ -34,5 +34,5 @@ sudo groupadd -f admin
 usermod otusadm -a -G admin && usermod root -a -G admin && usermod vagrant -a -G admin
 ```
 
->*Обратите внимание, что мы просто добавили пользователя otusadm в группу admin.*
+>*Обратите внимание, что мы просто добавили пользователя otusadm в группу admin.*  
 >**Это не делает пользователя otusadm администратором.**
