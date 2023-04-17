@@ -16,14 +16,14 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "web" do |web|
-    nfss.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: "net1"
-    nfss.vm.hostname = "web"
+    web.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: "net1"
+    web.vm.hostname = "web"
     #nfss.vm.provision "shell", path: "nfss_script.sh"
   end
 
   config.vm.define "log" do |log|
-    nfsc.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: "net1"
-    nfsc.vm.hostname = "log"
+    log.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: "net1"
+    log.vm.hostname = "log"
     #nfsc.vm.provision "shell", path: "nfsc_script.sh"
   end
 

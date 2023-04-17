@@ -40,7 +40,8 @@ systemctl restart chronyd
 systemctl status chronyd
 ```
 
-СКРИНШОТ1
+![служба работает корректно](./img/Screenshot_1.png)  
+
 
 Далее проверим, что время и дата указаны правильно:
 
@@ -48,7 +49,8 @@ systemctl status chronyd
 date
 ```
 
-СКРИНШОТ2  
+![время и дата указаны правильно](./img/Screenshot_2.png)  
+
 
 **Настроить NTP нужно на обоих серверах.**
 
@@ -61,17 +63,16 @@ yum install epel-release
 yum install -y nginx  
 ```
 
-Проверим, что nginx работает корректно:
+Запустим и проверим, что nginx работает корректно:
 
 ```bash
+systemctl start nginx
 systemctl status nginx
 ```
 
-СКРИНШОТ3
+![служба nginx работает корректно](./img/Screenshot_3.png)  
 
 Также работу nginx можно проверить на хосте. В браузере ввведем в адерсную строку <http://192.168.56.10>
-
-СКРИНШОТ4
 
 **4. Настройка центрального сервера сбора логов**
 
@@ -82,7 +83,35 @@ rsyslog должен быть установлен по умолчанию в н
 ```bash
 yum list rsyslog
 ```
+![служба rsyslog работает корректно](./img/Screenshot_4.png)  
 
 Все настройки Rsyslog хранятся в файле /etc/rsyslog.conf  
 Для того, чтобы наш сервер мог принимать логи, нам необходимо внести следующие изменения в файл:  
 Открываем порт 514 (TCP и UDP):  
+Находим и раскомментируем строки:  
+
+```bash
+# Provides UDP syslog reception
+$ModLoad imudp
+$UDPServerRun 514
+
+# Provides TCP syslog reception
+$ModLoad imtcp
+$InputTCPServerRun 514
+```
+
+В конец файла /etc/rsyslog.conf добавляем правила приёма сообщений от хостов:  
+
+```bash
+#Add remote logs
+$template RemoteLogs,"/var/log/rsyslog/%HOSTNAME%/%PROGRAMNAME%.log"
+*.* ?RemoteLogs
+& ~
+```
+Далее сохраняем файл и перезапускаем службу rsyslog: ```systemctl restart rsyslog```  
+Если ошибок не допущено, то у нас будут видны открытые порты TCP,UDP 514:  
+
+
+![служба rsyslog работает корректно порты открыты](./img/Screenshot_5.png)  
+
+
