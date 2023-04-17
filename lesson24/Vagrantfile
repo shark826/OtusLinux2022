@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
     end
 
   config.vm.define "sysd" do |sysd|
-    sysd.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: "net1"
+    sysd.vm.network "private_network", ip: "192.168.11.150", virtualbox__intnet: "net1"
     sysd.vm.hostname = "pam"
     sysd.vm.provision "shell", inline: <<-SHELL
     #Разрешаем подключение пользователей по SSH с использованием пароля

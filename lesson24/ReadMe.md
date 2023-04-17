@@ -11,7 +11,7 @@
 ```vagrant up```  
 запускаем виртуальную машину  
   
-Будет создана виртуальная машина с именем **_pam_**, ip-адресом - **_192.168.56.10_**
+Будет создана виртуальная машина с именем **_pam_**, ip-адресом - **_192.168.11.150_**
 
 Заходим на машину:  
 ```vagrant ssh pam```
@@ -20,9 +20,14 @@
 
 1. Внутри виртуалки переходим в root пользователя:  
 ```sudo -i```  
-2. Создаём пользователя otusadm и otus. Задаём пользователям пароли:  
+2. Создаём пользователя otusadm и otus. Задаём пользователям одинаковые пароли:  
 ```bash
  sudo useradd otusadm && sudo useradd otus    
  echo "Otus2023!" | sudo passwd --stdin otusadm && echo "Otus2023!" | sudo passwd --stdin otus
 ```
-`
+3. Создаём группу admin и добавляем в нее пользователей vagrant,root и otusadm :  
+```bash
+sudo groupadd -f admin  
+usermod otusadm -a -G admin && usermod root -a -G admin && usermod vagrant -a -G admin
+```
+
