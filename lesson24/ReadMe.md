@@ -58,7 +58,7 @@ admin:x:1003:otusadm,root,vagrant
 >_Информация о группах и пользователях в них хранится в файле_ **/etc/group,** _пользователи указываются через запятую._
 Выберем метод PAM-аутентификации, так как у нас используется только ограничение по времени, то было бы логично использовать метод pam_time, однако, данный метод не работает с локальными группами пользователей, и, получается, что использование данного метода добавит нам большое количество однообразных строк с разными пользователями. В текущей ситуации лучше написать небольшой скрипт контроля и использовать модуль pam_exec
 
-5. Создадим файл-скрипт /usr/local/bin/login.sh, следующего содержания:  
+5. Создадим файл-скрипт [/usr/local/bin/login.sh](login.sh), следующего содержания:  
 
 ```bash
 #!/bin/bash
@@ -91,7 +91,7 @@ auth       substack     password-auth
 auth       include      postlogin
 # Used with polkit to reauthorize users in remote sessions
 -auth      optional     pam_reauthorize.so prepare
-**account    required     pam_exec.so /usr/local/bin/login.sh**
+account    required     pam_exec.so /usr/local/bin/login.sh
 account    required     pam_nologin.so
 account    include      password-auth
 password   include      password-auth
@@ -111,5 +111,15 @@ session    include      postlogin
 
 На этом настройка завершена, нужно только проверить, что скрипт отрабатывает корректно.  
 
+Для проверки работы скрипта сменим дату на выходной день, ВСК 16 апреля 2023
+```bash
+[root@pam ~]# date 041612002023
+Sun Apr 16 12:00:00 UTC 2023
+[root@pam ~]# date
+Sun Apr 16 12:00:05 UTC 2023
+[root@pam ~]#
+```
 
-ПРОВЕРКА ВХОДА СО СКРИНШОТАМИ
+![вход в выходные](./img/Screenshot_2.PNG)
+
+Если настройки выполнены правильно, то при логине пользователя **_otus_** у Вас должна появиться ошибка. Пользователь **_otusadm_** должен подключаться без проблем:
