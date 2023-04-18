@@ -42,7 +42,7 @@ usermod otusadm -a -G admin && usermod root -a -G admin && usermod vagrant -a -G
 
 Далее вводим наш созданный пароль Otus2023!
 
-![вход новыми пользюками](./img/Screenshot_1.png)
+![вход новыми пользюками](./img/Screenshot_1.PNG)
 
 Если всё настроено правильно, на этом моменте мы сможет подключиться по SSH под пользователем otus и otusadm.  
 
