@@ -10,10 +10,10 @@ Vagrant.configure(2) do |config|
       v.cpus = 1
     end
 
-  config.vm.define "sysd" do |sysd|
-    sysd.vm.network "private_network", ip: "192.168.11.150", virtualbox__intnet: "net1"
-    sysd.vm.hostname = "pam"
-    sysd.vm.provision "shell", inline: <<-SHELL
+  config.vm.define "pam" do |pam|
+    pam.vm.network "private_network", ip: "192.168.11.150", virtualbox__intnet: "net1"
+    pam.vm.hostname = "pam"
+    pam.vm.provision "shell", inline: <<-SHELL
     #Разрешаем подключение пользователей по SSH с использованием пароля
     sed -i 's/^PasswordAuthentication.*$/PasswordAuthentication yes/' /etc/ssh/sshd_config
     #Перезапуск службы SSHD

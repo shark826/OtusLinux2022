@@ -38,11 +38,11 @@ usermod otusadm -a -G admin && usermod root -a -G admin && usermod vagrant -a -G
 >**Это не делает пользователя otusadm администратором.**  
 
 После создания пользователей, нужно проверить, что они могут подключаться по SSH к нашей ВМ. Для этого пытаемся подключиться с хостовой машины:
-```ssh otus@192.168.57.10```  
+```ssh otus@192.168.11.150```  
 
 Далее вводим наш созданный пароль Otus2023!
 
-**SCREENSHOT WITH SSH**
+![вход новыми пользюками](./img/Screenshot_1.png)
 
 Если всё настроено правильно, на этом моменте мы сможет подключиться по SSH под пользователем otus и otusadm.  
 
@@ -78,13 +78,36 @@ if [ $(date +%a) = "Sat" ] || [ $(date +%a) = "Sun" ]; then
 fi
 ```
 
-6. Добавим права на исполнение файла: chmod +x /usr/local/bin/login.sh
+6. Добавим права на исполнение файла: ```chmod +x /usr/local/bin/login.sh```
 
 7. Укажем в файле /etc/pam.d/sshd модуль pam_exec и наш скрипт:
 
-vi /etc/pam.d/sshd 
+```vi /etc/pam.d/sshd```
 
+```bash
+#%PAM-1.0
+auth       required     pam_sepermit.so
+auth       substack     password-auth
+auth       include      postlogin
+# Used with polkit to reauthorize users in remote sessions
+-auth      optional     pam_reauthorize.so prepare
+**account    required     pam_exec.so /usr/local/bin/login.sh**
+account    required     pam_nologin.so
+account    include      password-auth
+password   include      password-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open env_params
+session    required     pam_namespace.so
+session    optional     pam_keyinit.so force revoke
+session    include      password-auth
+session    include      postlogin
+# Used with polkit to reauthorize users in remote sessions
+-session   optional     pam_reauthorize.so prepare
 
+```
 
 На этом настройка завершена, нужно только проверить, что скрипт отрабатывает корректно.  
 
