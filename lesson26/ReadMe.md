@@ -111,7 +111,46 @@ $template RemoteLogs,"/var/log/rsyslog/%HOSTNAME%/%PROGRAMNAME%.log"
 Далее сохраняем файл и перезапускаем службу rsyslog: ```systemctl restart rsyslog```  
 Если ошибок не допущено, то у нас будут видны открытые порты TCP,UDP 514:  
 
-
 ![служба rsyslog работает корректно порты открыты](./img/Screenshot_5.png)  
 
+**5. Настройка отправки логов с web-сервера**  
 
+Заходим на web сервер: _vagrant ssh web_  
+Переходим в root пользователя: _sudo -i_  
+Проверим версию nginx: _rpm -qa | grep nginx_  
+>Версия nginx должна быть 1.7 или выше. В нашем примере используется версия nginx 1.20
+
+![версия nginx](./img/Screenshot_6.png)  
+
+В файле конфигурации web-сервера /etc/nginx/nginx.conf раздел с логами и приводим к следующему виду:  
+
+```bash
+error_log /var/log/nginx/error.log;
+error_log syslog:server=192.168.56.11:514,tag=nginx_error;
+...
+access_log syslog:server=192.168.56.11:514,tag=nginx_access,severity=info combined;
+...
+```  
+Для access_log указываем удаленный сервер и уровень логов, которые нужно отправлять.  
+Для error_log добавляем удаленный сервер. Если требуется чтобы логи хранились локально и отправлялись на удаленный сервер, требуется указать 2 строки. 	
+Tag нужен для того, чтобы логи записывались в разные файлы.  
+По умолчанию, error-логи отправляют логи, которые имеют severity: error, crit, alert и emerg. Если трубуется хранить или пересылать логи с другим severity, то это также можно указать в настройках nginx. 
+Далее проверяем, что конфигурация nginx указана правильно: _nginx -t_  
+```bash
+[root@web ~]# nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[root@web ~]# 
+```
+Далее перезапустим nginx: _systemctl restart nginx_  
+
+Чтобы проверить, что логи ошибок также улетают на удаленный сервер, можно удалить картинку, к которой будет обращаться nginx во время открытия веб-сраницы: _rm /usr/share/nginx/html/img/header-background.png_
+
+Попробуем несколько раз зайти по адресу **http://192.168.50.10**
+Далее заходим на log-сервер и смотрим информацию об nginx:
+```
+cat /var/log/rsyslog/web/nginx_access.log 
+cat /var/log/rsyslog/web/nginx_error.log 
+```
+
+![logs nginx](./img/Screenshot_7.png)  
