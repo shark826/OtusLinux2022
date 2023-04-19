@@ -22,22 +22,35 @@
 Заходим на машину:  
 ```vagrant ssh backup```
 
-здесь нужно примонтировать второй жесткий диск, дать права на папку для бэкапа пользовотелю borg  
-так же на обоих машинах нужно настроить между собой ssh соединение по ключу.
+здесь нужно примонтировать второй жесткий диск:  
+```bash
+[root@backup ~]# mkdir /var/backup
+[root@backup ~]# mount /dev/sdb1 /var/backup/
+[root@backup ~]# lsblk
+NAME   MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+sda      8:0    0  40G  0 disk
+└─sda1   8:1    0  40G  0 part /
+sdb      8:16   0   2G  0 disk
+└─sdb1   8:17   0   2G  0 part /var/backup
+```
+Создать пользователя borg и дать права на папку для бэкапа этому пользовотелю
 
-На сервере backup создаем пользователя и каталог /var/backup (в домашнем задании нужно будет создать диск ~2Gb и примонтировать его) и назначаем на него права пользователя borg
-	# useradd -m 			
-	# mkdir /var/backup
-	# chown borg:borg /var/backup/
+```bash
+[root@backup ~]# useradd -m borg			
+[root@backup ~]# chown borg:borg /var/backup/
+```
 
-На сервер backup создаем каталог ~/.ssh/authorized_keys в каталоге /home/borg
-	# su - borg
-	# mkdir .ssh
-   	# touch .ssh/authorized_keys
-   	# chmod 700 .ssh
-   	# chmod 600 .ssh/authorized_keys
+Так же на обоих машинах нужно настроить между собой ssh соединение по ключу.
+На сервер backup создаем каталог ~/.ssh/ и файл authorized_keys в каталоге /home/borg и установить прав доступа к файлам и каталогам  
+```bash
+[root@backup ~]# su - borg
+[borg@backup ~]$ mkdir .ssh
+[borg@backup ~]$ touch .ssh/authorized_keys
+[borg@backup ~]$ chmod 700 .ssh
+[borg@backup ~]$ chmod 600 .ssh/authorized_keys
+```
 
-На client генерируем ssh-ключ и добавляем его на сервер backup  в файл authorized_keys созданным на прошлом шаге 
+На ВМ client генерируем ssh-ключ и добавляем его на сервер backup  в файл authorized_keys созданным на прошлом шаге 
 	# ssh-keygen
 
 
