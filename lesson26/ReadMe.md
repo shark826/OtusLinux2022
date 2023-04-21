@@ -154,3 +154,32 @@ cat /var/log/rsyslog/web/nginx_error.log
 ```
 
 ![logs nginx](./img/Screenshot_7.png)  
+
+**6. Настройка аудита, контролирующего изменения конфигурации nginx**  
+
+За аудит отвечает утилита _auditd_, в Centos обычно он уже предустановлен. Проверим это:  
+
+```bash
+[vagrant@web ~]$ rpm -qa | grep audit
+audit-2.8.5-4.el7.x86_64
+audit-libs-2.8.5-4.el7.x86_64
+[vagrant@web ~]$ 
+```
+Настроим аудит изменения конфигурации nginx:
+Добавим правило, которое будет отслеживать изменения в конфигруации nginx. Для этого в конец файла _/etc/audit/rules.d/audit.rules_ добавим следующие строки:
+
+![audit.rules](./img/Screenshot_8.png)  
+
+
+Данные правила позволяют контролировать запись (w) и измения атрибутов (a) в файле конфигурации /etc/nginx/nginx.conf и всех файлов каталога /etc/nginx/default.d/  
+Для более удобного поиска к событиям добавляется метка **nginx_conf**  
+Перезапускаем службу auditd: _service auditd restart_  
+
+После данных изменений у нас начнут локально записываться логи аудита. Чтобы проверить, что логи аудита начали записываться локально, нужно внести изменения в файл /etc/nginx/nginx.conf или поменять его атрибут, потом посмотреть информацию об изменениях: _ausearch -f /etc/nginx/nginx.conf_
+
+![audit.rules9](./img/Screenshot_9.png)
+
+Также можно воспользоваться поиском по файлу /var/log/audit/audit.log, указав наш тэг: grep nginx_conf /var/log/audit/audit.log
+
+![audit.rules10](./img/Screenshot_10.png)
+
