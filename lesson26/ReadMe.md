@@ -179,7 +179,39 @@ audit-libs-2.8.5-4.el7.x86_64
 
 ![audit.rules9](./img/Screenshot_9.png)
 
-Также можно воспользоваться поиском по файлу /var/log/audit/audit.log, указав наш тэг: grep nginx_conf /var/log/audit/audit.log
+Также можно воспользоваться поиском по файлу /var/log/audit/audit.log, указав наш тэг: 
+*grep nginx_conf /var/log/audit/audit.log*
 
 ![audit.rules10](./img/Screenshot_10.png)
 
+
+Далее настроим пересылку логов на удаленный сервер. Auditd по умолчанию не умеет пересылать логи, для пересылки на web-сервере потребуется установить пакет **audispd-plugins:** _yum -y install audispd-plugins_  
+
+Найдем и поменяем следующие строки в файле /etc/audit/auditd.conf: 
+
+![audit.rules11](./img/Screenshot_11.png)
+
+В name_format  указываем HOSTNAME, чтобы в логах на удаленном сервере отображалось имя хоста. 
+В файле /etc/audisp/plugins.d/au-remote.conf поменяем параметр _active_ на _yes_:
+
+![audit.rules12](./img/Screenshot_12.png)
+
+В файле /etc/audisp/audisp-remote.conf требуется указать адрес сервера и порт, на который будут отправляться логи:
+
+![audit.rules13](./img/Screenshot_13.png)  
+
+Перезапускаем службу auditd: _service auditd restart_
+На этом настройка web-сервера завершена. 
+
+Произведем правки на Log-сервере, скорректируем файл _/etc/audit/auditd.conf:_
+раскомментируем строку ```tcp_listen_port = 60```  
+
+Перезапустим службу auditd: _service auditd restart_  
+
+На этом настройка пересылки логов аудита закончена. Можем попробовать поменять атрибут у файла **/etc/nginx/nginx.conf** и проверить на log-сервере, что пришла информация об изменении атрибута:  
+
+![audit.rules14](./img/Screenshot_14.png)
+
+Информация из файла аудита по серверу web:  
+
+![audit.rules15](./img/Screenshot_15.png)
