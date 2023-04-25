@@ -21,8 +21,8 @@
 
 Заходим на машину:  
 ```vagrant ssh backup```
-
-здесь нужно примонтировать второй жесткий диск:  
+С помощью программы cfdisk и утилиты mkfs.ext4 создаем радел _sdb1_  
+Примонтируем раздел второго жесткого диска:  
 ```bash
 [root@backup ~]# mkdir /var/backup
 [root@backup ~]# mount /dev/sdb1 /var/backup/
@@ -33,7 +33,12 @@ sda      8:0    0  40G  0 disk
 sdb      8:16   0   2G  0 disk
 └─sdb1   8:17   0   2G  0 part /var/backup
 ```
-Создать пользователя borg и дать права на папку для бэкапа этому пользовотелю
+для постоянного монтирования нашего жесткого диска для бэкапов в файле _/etc/fstab_ добавим сторку:  
+
+```/dev/sdb1 /var/backup/ ext4   defaults        0 0```
+
+
+Создаем пользователя borg и даем права на папку для бэкапа этому пользователю
 
 ```bash
 [root@backup ~]# useradd -m borg			
@@ -66,3 +71,117 @@ borg init --encryption=repokey borg@192.168.11.160:/var/backup/repo
 ```bash
 borg init -e none borg@192.168.11.160:/var/backup/myrepo2
 ```
+После выполнения этих команд на сервере backup появились папки репозиториев: 
+
+```bash
+[root@backup ~]# ls -la /var/backup/
+total 28
+drwxr-xr-x.  5 borg borg  4096 Apr 25 11:17 .
+drwxr-xr-x. 19 root root   268 Apr 25 10:09 ..
+drwx------.  2 borg borg 16384 Apr 25 10:09 lost+found
+drwx------.  3 borg borg  4096 Apr 25 11:17 myrepo2
+drwx------.  3 borg borg  4096 Apr 25 11:16 repo
+```
+
+Запускаем для проверки создания бэкапа, создадим резервную копию каталога /etc  
+```borg create --stats --list borg@192.168.11.160:/var/backup/::"etc-{now:%Y-%m-%d_%H:%M:%S}" /etc```
+Команда закончилась следующим выводом на экран:  
+
+```bash
+Archive name: etc-2023-04-25_11:48:23
+Archive fingerprint: 3ecd70ab33a4455ad31e065b35cd50006e06d8b22769b42690ee6601212ee7c4
+Time (start): Tue, 2023-04-25 11:48:24
+Time (end):   Tue, 2023-04-25 11:48:29
+Duration: 5.09 seconds
+Number of files: 1700
+Utilization of max. archive size: 0%
+------------------------------------------------------------------------------
+                       Original size      Compressed size    Deduplicated size
+This archive:               28.43 MB             13.49 MB             11.84 MB
+All archives:               28.43 MB             13.49 MB             11.84 MB
+
+                       Unique chunks         Total chunks
+Chunk index:                    1280                 1697
+------------------------------------------------------------------------------
+[root@client ~]#
+```
+
+Смотрим, что у нас получилось
+```bash
+[root@client ~]# borg list borg@192.168.11.160:/var/backup/repo
+etc-2023-04-25_11:48:23              Tue, 2023-04-25 11:48:24 [3ecd70ab33a4455ad31e065b35cd50006e06d8b22769b42690ee6601212ee7c4]
+[root@client ~]#
+```
+
+Смотрим список файлов
+```borg list borg@192.168.11.160:/var/backup/repo::etc-2023-04-25_11:48:23```
+
+Изменяем к примеру файл /etc/hosts , а затем заменим его из резервной копии:  
+
+![new_hosts](./img/Screenshot_1.png)  
+
+Достаем файл из бека
+```borg extract borg@192.168.11.160:/var/backup/repo::etc-2023-04-25_11:48:23 etc/hosts```
+файл распоковывается в текущую папку в каталог архива, в нашем случае _etc_  
+
+![original_hosts](./img/Screenshot_2.png)  
+
+при необходимости меняем текущий файл на файл из резервной копии.  
+
+
+Автоматизируем создание бэкапов с помощью systemd
+Создаем сервис и таймер в каталоге /etc/systemd/system/
+# /etc/systemd/system/borg-backup.service
+[Unit]
+Description=Borg Backup
+
+[Service]
+Type=oneshot
+
+# Парольная фраза
+Environment="BORG_PASSPHRASE=Otus1234"
+# Репозиторий
+Environment=REPO=borg@192.168.11.160:/var/backup/
+# Что бэкапим
+Environment=BACKUP_TARGET=/etc
+
+# Создание бэкапа
+ExecStart=/bin/borg create \
+    --stats                \
+    ${REPO}::etc-{now:%%Y-%%m-%%d_%%H:%%M:%%S} ${BACKUP_TARGET}
+
+# Проверка бэкапа
+ExecStart=/bin/borg check ${REPO}
+
+# Очистка старых бэкапов
+ExecStart=/bin/borg prune \
+    --keep-daily  90      \
+    --keep-monthly 12     \
+    --keep-yearly  1       \
+    ${REPO}
+
+
+
+# /etc/systemd/system/borg-backup.timer
+[Unit]
+Description=Borg Backup
+
+[Timer]
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target
+
+Включаем и запускаем службу таймера
+# systemctl enable borg-backup.timer 
+# systemctl start borg-backup.timer
+
+Проверяем работу таймера
+# systemctl list-timers --all
+NEXT                          LEFT          LAST                          PASSED       UNIT                         ACTIVATES
+Сб 2021-10-16 11:37:51 UTC  3min 25s left Сб 2021-10-16 11:32:51 UTC  1min 34s ago borg-backup.timer            borg-backup.service
+
+Проверяем список бекапов
+Enter passphrase for key ssh://borg@192.168.11.160/var/backup: 
+etc-2021-10-15_23:00:15 Fri, 2021-10-15 23:00:21 
+etc-2021-10-16_11:32:51 Sat, 2021-10-16 11:32:52
