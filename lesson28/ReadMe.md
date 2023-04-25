@@ -145,7 +145,7 @@ Type=oneshot
 # Парольная фраза
 Environment="BORG_PASSPHRASE=Otus1234"
 # Репозиторий
-Environment=REPO=borg@192.168.11.160:/var/backup/
+Environment=REPO=borg@192.168.11.160:/var/backup/repo
 # Что бэкапим
 Environment=BACKUP_TARGET=/etc
 
@@ -184,15 +184,15 @@ WantedBy=timers.target
 
 Проверяем работу таймера
 ```bash
-# systemctl list-timers --all
-NEXT                          LEFT          LAST                          PASSED       UNIT                         ACTIVATES
-Сб 2021-10-16 11:37:51 UTC  3min 25s left Сб 2021-10-16 11:32:51 UTC  1min 34s ago borg-backup.timer            borg-backup.service
+[root@client ~]# systemctl list-timers --all
+NEXT                         LEFT          LAST                         PASSED       UNIT                         ACTIVATES
+Tue 2023-04-25 13:26:28 UTC  42s left Tue 2023-04-25 13:21:28 UTC  4min 17s ago borg-backup.timer            borg-backup.service
 ```
 
 Проверяем список бекапов
 ```bash
-borg list borg@192.168.11.160:/var/backup/repo
-
-etc-2021-10-15_23:00:15 Fri, 2021-10-15 23:00:21 
-etc-2021-10-16_11:32:51 Sat, 2021-10-16 11:32:52
+[root@client ~]# borg list borg@192.168.11.160:/var/backup/repo
+etc-2023-04-25_13:21:29              Tue, 2023-04-25 13:21:30 [3ab380eaf402d1edd6dc66f7c8018b7fc9cee3b1df381cbc7b92f8c33ba1f7f7]
+etc-2023-04-25_13:27:29              Tue, 2023-04-25 13:27:30 [e506c7a10593e69b07660448427bee73462cea2a825769fb2c84b0b3ff78e2f6]
+etc-2023-04-25_13:33:29              Tue, 2023-04-25 13:33:30 [d42d4043f4cf366ed2c1bfa781b1787d98d1943b4035574bf762b2d4d14feb55]
 ```
