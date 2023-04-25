@@ -129,9 +129,13 @@ etc-2023-04-25_11:48:23              Tue, 2023-04-25 11:48:24 [3ecd70ab33a4455ad
 при необходимости меняем текущий файл на файл из резервной копии.  
 
 
-Автоматизируем создание бэкапов с помощью systemd
+### Автоматизируем создание бэкапов с помощью systemd  
+
 Создаем сервис и таймер в каталоге /etc/systemd/system/
-# /etc/systemd/system/borg-backup.service
+
+```bash
+#vi /etc/systemd/system/borg-backup.service  
+
 [Unit]
 Description=Borg Backup
 
@@ -159,9 +163,9 @@ ExecStart=/bin/borg prune \
     --keep-monthly 12     \
     --keep-yearly  1       \
     ${REPO}
+```
 
-
-
+```bash
 # /etc/systemd/system/borg-backup.timer
 [Unit]
 Description=Borg Backup
@@ -171,17 +175,24 @@ OnUnitActiveSec=5min
 
 [Install]
 WantedBy=timers.target
-
-Включаем и запускаем службу таймера
+```
+Включаем и запускаем службу таймера  
+```bash
 # systemctl enable borg-backup.timer 
 # systemctl start borg-backup.timer
+```
 
 Проверяем работу таймера
+```bash
 # systemctl list-timers --all
 NEXT                          LEFT          LAST                          PASSED       UNIT                         ACTIVATES
 Сб 2021-10-16 11:37:51 UTC  3min 25s left Сб 2021-10-16 11:32:51 UTC  1min 34s ago borg-backup.timer            borg-backup.service
+```
 
 Проверяем список бекапов
-Enter passphrase for key ssh://borg@192.168.11.160/var/backup: 
+```bash
+borg list borg@192.168.11.160:/var/backup/repo
+
 etc-2021-10-15_23:00:15 Fri, 2021-10-15 23:00:21 
 etc-2021-10-16_11:32:51 Sat, 2021-10-16 11:32:52
+```
