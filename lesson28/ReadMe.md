@@ -20,7 +20,7 @@
 
 
 Заходим на машину:  
-```vagrant ssh backup```
+```vagrant ssh backup```  
 С помощью программы cfdisk и утилиты mkfs.ext4 создаем радел _sdb1_  
 Примонтируем раздел второго жесткого диска:  
 ```bash
@@ -84,7 +84,7 @@ drwx------.  3 borg borg  4096 Apr 25 11:16 repo
 ```
 
 Запускаем для проверки создания бэкапа, создадим резервную копию каталога /etc  
-```borg create --stats --list borg@192.168.11.160:/var/backup/::"etc-{now:%Y-%m-%d_%H:%M:%S}" /etc```
+```borg create --stats --list borg@192.168.11.160:/var/backup/::"etc-{now:%Y-%m-%d_%H:%M:%S}" /etc```  
 Команда закончилась следующим выводом на экран:  
 
 ```bash
@@ -113,15 +113,15 @@ etc-2023-04-25_11:48:23              Tue, 2023-04-25 11:48:24 [3ecd70ab33a4455ad
 [root@client ~]#
 ```
 
-Смотрим список файлов
+Смотрим список файлов  
 ```borg list borg@192.168.11.160:/var/backup/repo::etc-2023-04-25_11:48:23```
 
 Изменяем к примеру файл /etc/hosts , а затем заменим его из резервной копии:  
 
 ![new_hosts](./img/Screenshot_1.png)  
 
-Достаем файл из бека
-```borg extract borg@192.168.11.160:/var/backup/repo::etc-2023-04-25_11:48:23 etc/hosts```
+Достаем файл из бекапа  
+```borg extract borg@192.168.11.160:/var/backup/repo::etc-2023-04-25_11:48:23 etc/hosts```  
 файл распоковывается в текущую папку в каталог архива, в нашем случае _etc_  
 
 ![original_hosts](./img/Screenshot_2.png)  
