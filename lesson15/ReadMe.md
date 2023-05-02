@@ -53,3 +53,36 @@ ansible 2.10.8
 Для подключения к хосту nginx нам необходимо будет передать множество параметров - это особенность Vagrant. Узнать эти параметры можно с помощью команды
 ```vagrant ssh-config```
 
+```bash
+Host nginx
+  HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile ~/.vagrant/machines/nginx/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+```
+из полученных данных создадим inventory файл следующего содержания:
+
+```bash
+[web]
+nginx ansible_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansible_private_key_file=.vagrant/machines/nginx/virtualbox/private_key
+
+```
+Проверим, что Ansible может управлять нашим хостом. Сделать это можно с помощью команды: 
+```bash
+$ ansible nginx -i hosts -m ping
+
+nginx | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+```

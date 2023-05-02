@@ -24,7 +24,9 @@ Vagrant.configure("2") do |config|
           end
           
           box.vm.provision "shell", inline: <<-SHELL
-            mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+            sudo -i
+            mkdir -p ~root/.ssh
+            cp ~vagrant/.ssh/auth* ~root/.ssh
             sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
             systemctl restart sshd
           SHELL
