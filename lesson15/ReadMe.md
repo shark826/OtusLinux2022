@@ -8,25 +8,13 @@
   
 Использую Vagrantfile, который в репозитории
 замечания:  
-:ip_addr => '192.168.56.102', - это моя подсеть которую выдал VirtualBox  
+:ip_addr => '192.168.56.15', - это моя подсеть которую выдал VirtualBox  
 
 вносим в .gitingore файлы с дисками, чтоб не пушить в репозиторий
 
-```vagrant up```  
-запускаем виртуальную машину  
+**2. Установка и настройка Ansible на хосте**  
 
-Заходим на сервер:  
-```vagrant ssh```  
-
-Внутри виртуалки переходим в root пользователя:  
-```su```  
-обновим систему:  
-
-```apt update && apt dist-upgrade -y```  
-
-**2. Установка и нстройка Ansible**  
-
-Так как мной был выбран дистрибутив Debian, то инсталяция описана по [ссылке](https://docs.ansible.com/ansible/2.7/installation_guide/intro_installation.html#latest-releases-via-apt-debian) из офицальной документцаии.  
+Так как на хостовой машине мной был выбран дистрибутив Debian, то инсталяция описана по [ссылке](https://docs.ansible.com/ansible/2.7/installation_guide/intro_installation.html#latest-releases-via-apt-debian) из офицальной документцаии.  
 
 Добавим репозиторий Ansible  
 ```deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main```  
@@ -56,3 +44,12 @@ ansible 2.10.8
   executable location = /usr/bin/ansible
   python version = 3.9.2 (default, Feb 28 2021, 17:03:44) [GCC 10.2.1 20210110]
 ```
+
+**2.1 Параметры соеденения с виртуальной машиной**
+
+```vagrant up```  
+запускаем виртуальную машину  
+
+Для подключения к хосту nginx нам необходимо будет передать множество параметров - это особенность Vagrant. Узнать эти параметры можно с помощью команды
+```vagrant ssh-config```
+

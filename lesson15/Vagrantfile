@@ -3,8 +3,8 @@
 
 MACHINES = {
   :nginx => {
-        :box_name => "debian/bullseye64",
-        :ip_addr => '192.168.11.150'
+        :box_name => "centos/7",
+        :ip_addr => '192.168.56.150'
   }
 }
 
