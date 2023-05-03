@@ -187,3 +187,15 @@ nginx                      : ok=2    changed=0    unreachable=0    failed=0    s
 
 **5. Playbook для установки и конфигурации веб-сервера NGINX**
 
+За основу возьмем уже созданный нами файл epel.yml переименуем его в nginx.yml. И добавим в него секцию (TASK) по установке пакета NGINX.  
+Секция будет выглядеть так:  
+
+```bash
+- name: Install nginx package from epel repo
+   yum:
+    name: nginx
+    state: latest
+   tags:
+    - nginx-package 
+    - packages
+```
