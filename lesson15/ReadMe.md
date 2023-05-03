@@ -199,3 +199,15 @@ nginx                      : ok=2    changed=0    unreachable=0    failed=0    s
     - nginx-package 
     - packages
 ```
+
+в файле добавили Tags. Теперь можно вывести в консоль список тегов и вýполнить, например, только установку NGINX. В нашем случае так, например, можно осуществлять его обновление.  
+Выведем в консоль все теги нашего Playbook:
+[root@nginx ~#] ansible-playbook nginx.yml --list-tags
+playbook: epel.yml
+play #1 (nginx): NGINX | Install and configure NGINX TAGS: []
+TASK TAGS: [epel-package, nginx-package, packages]
+
+● Запустим толþко установку NGINX:
+[root@nginx ~#] ansible-playbook nginx.yml -t nginx-package
+PLAY RECAP ******************************************************************
+nginx : ok=2 changed=0 unreachable=0 failed=0
