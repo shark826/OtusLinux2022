@@ -226,4 +226,60 @@ changed: [nginx]
 PLAY RECAP *********************************************************************
 nginx                      : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
+```  
+
+Добавим TASK по конфигурированию NGINX из шаблона в формате jinja2:  
+```bash
+
+- name: NGINX | Create NGINX config file from template
+   template:
+    src: templates/nginx.conf.j2
+    dest: /tmp/nginx.conf
+   tags:
+    - nginx-configuration
+
 ```
+Сразу же пропишем в Playbook необходимую нам переменную и ее значение: __*nginx_listen_port: 8080*__
+
+Создадим _handler_ и добавим _notify_ к копированию шаблона. Теперь каждый раз когда конфиг будет изменяться - сервис перезагрузиться.
+Секция с handlers будет выглядеть следующим образом:
+handlers:
+```bash
+- name: restart nginx
+  systemd:
+   name: nginx
+   state: restarted
+   enabled: yes
+
+- name: reload nginx
+  systemd:
+   name: nginx
+   state: reloaded
+```
+
+
+Notify будут выглядеть так:  
+```bash
+- name: NGINX | Install NGINX package from EPEL Repo
+yum:
+name: nginx
+state: latest
+notify:
+- restart nginx
+tags:
+- nginx-package
+- packages
+
+- name: NGINX | Create NGINX config file from template
+template:
+src: templates/nginx.conf.j2
+dest: /etc/nginx/nginx.conf
+notify:
+- reload nginx
+tags:
+- nginx-configuration
+```
+Готовый файл [nginx.yml.](nginx.yml)   
+Теперь можно его запустить:  
+
+ansible-playbook nginx.yml
