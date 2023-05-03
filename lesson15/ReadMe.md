@@ -86,3 +86,54 @@ nginx | SUCCESS => {
 }
 
 ```
+Для установки дефолтных значений нужно создать файл _ansible.cfg_ в текущей дериктории проекта, либо в файле _/etc/ansible/ansible.cfg_
+Отредактируем файл _/etc/ansible/ansible.cfg_ и приведем его к виду:  
+
+```bash
+[defaults]
+inventory = /etc/ansible/hosts
+remote_user = vagrant
+host_key_checking = False
+retry_files_enabled = False
+```
+Из файла hosts можно убрать параметр о пользователе - *ansible_user=vagrant*, т.к. мы его вписали как дефолтного 
+Снова проверим связь:  
+
+```bash
+$ ansible nginx -m ping
+nginx | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+**3. Ad-Hoc команды**
+
+Посмотрим какое āдро установлено на хосте:
+```bash
+$ ansible nginx -m command -a "uname -r"
+nginx | CHANGED | rc=0 >>
+3.10.0-1127.el7.x86_64
+```
+Проверим статус сервиса firewalld
+```bash
+$ ansible nginx -m systemd -a name=firewalld
+nginx | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "name": "firewalld",
+    "status": {
+        "ActiveEnterTimestampMonotonic": "0",
+        "ActiveExitTimestampMonotonic": "0",
+        "ActiveState": "inactive", не активен
+```
+Установим пакет epel-release на наш хост
+```bash
+$ ansible nginx -m yum -a "name=epel-release state=present" -b
+nginx | SUCCESS => {
+"changed": true, пакет установился
+```
