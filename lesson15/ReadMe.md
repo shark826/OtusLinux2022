@@ -261,23 +261,23 @@ handlers:
 Notify будут выглядеть так:  
 ```bash
 - name: NGINX | Install NGINX package from EPEL Repo
-yum:
-name: nginx
-state: latest
-notify:
-- restart nginx
-tags:
-- nginx-package
-- packages
+  yum:
+   name: nginx
+   state: latest
+  notify:
+   - restart nginx
+  tags:
+   - nginx-package
+   - packages
 
 - name: NGINX | Create NGINX config file from template
-template:
-src: templates/nginx.conf.j2
-dest: /etc/nginx/nginx.conf
-notify:
-- reload nginx
-tags:
-- nginx-configuration
+  template:
+   src: templates/nginx.conf.j2
+   dest: /etc/nginx/nginx.conf
+  notify:
+   - reload nginx
+  tags:
+   - nginx-configuration
 ```
 Готовый файл [nginx.yml.](nginx.yml)   
 Теперь можно его запустить:  
