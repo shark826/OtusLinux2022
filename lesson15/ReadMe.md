@@ -96,7 +96,7 @@ remote_user = vagrant
 host_key_checking = False
 retry_files_enabled = False
 ```
-Из файла hosts можно убрать параметр о пользователе - *ansible_user=vagrant*, т.к. мы его вписали как дефолтного 
+Из файла hosts можно убрать параметр о пользователе - *ansible_user=vagrant*, т.к. мы его вписали как дефолтного  
 Снова проверим связь:  
 
 ```bash
@@ -111,7 +111,7 @@ nginx | SUCCESS => {
 ```
 **3. Ad-Hoc команды**
 
-Посмотрим какое āдро установлено на хосте:
+Посмотрим какое ядро установлено на хосте:
 ```bash
 $ ansible nginx -m command -a "uname -r"
 nginx | CHANGED | rc=0 >>
@@ -134,6 +134,53 @@ nginx | SUCCESS => {
 Установим пакет epel-release на наш хост
 ```bash
 $ ansible nginx -m yum -a "name=epel-release state=present" -b
-nginx | SUCCESS => {
-"changed": true, пакет установился
+nginx | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,  пакет установился
+    "changes": {
+        "installed": [
+            "epel-release"
+        ]
+    },
 ```
+
+***4. Playbook**
+
+Напишем простой Playbook который будет делать установку пакета _epel-release._  
+Создайте файл epel.yml со следующим содержимым:
+```bash
+---
+- name: Install EPEL Repo
+  hosts: nginx
+  become: true
+  tasks:
+    - name: Install EPEL Repo package from standart repo
+      yum:
+        name: epel-release
+        state: present
+
+```
+
+выполним Playbook:  
+
+```bash
+
+$ ansible-playbook epel.yml 
+
+PLAY [Install EPEL Repo] *******************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [nginx]
+
+TASK [Install EPEL Repo package from standart repo] ****************************
+ok: [nginx]
+
+PLAY RECAP *********************************************************************
+nginx                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+```
+
+**5. Playbook для установки и конфигурации веб-сервера NGINX**
+
