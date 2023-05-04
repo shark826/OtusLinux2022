@@ -22,6 +22,13 @@
 
 Для начала нам необходимо настроить [FreeIPA-сервер](https://www.freeipa.org/page/About). Подключимся к нему по SSH с помощью команды: ```vagrant ssh ipa.otus.lan``` и перейдём в root-пользователя: ```sudo -i```  
 
+>На момент написания ДЗ выдавала ошибку при обновлении или установки пакетов
+>
+>Решение:
+>в консоли выполнить команду:  
+>cd /etc/yum.repos.d/ | sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* | sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+  
+  
 Сделаем настройку FreeIPA-сервера:  
 Установим часовой пояс: ```timedatectl set-timezone Europe/Moscow```  
 Установим утилиту chrony: ```yum install -y chrony```  
