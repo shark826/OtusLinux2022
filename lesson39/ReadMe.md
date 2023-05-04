@@ -101,3 +101,10 @@ Valid starting     Expires            Service principal
 
 ![скрин4](./img/Screenshot_6.png) 
 ![скрин5](./img/Screenshot_7.png) 
+
+Откроется веб-консоль упрвления FreeIPA. Данные во FreeIPA можно вносить как через веб-консоль, так и средствами коммандной строки.  
+
+На этом установка и настройка FreeIPA-сервера завершена.
+
+### 2. Пишем ansible playbook для конфигурации клиента
+
