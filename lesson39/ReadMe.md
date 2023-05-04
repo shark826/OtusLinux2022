@@ -79,3 +79,4 @@ __*The ipa-server-install command was successful*__
 ![скрин2](./img/Screenshot_2.png) 
 ![скрин3](./img/Screenshot_3.png) 
 ![скрин4](./img/Screenshot_4.png) 
+![скрин5](./img/Screenshot_5.png) 
