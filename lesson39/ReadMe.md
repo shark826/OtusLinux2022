@@ -16,19 +16,19 @@
 с именем **_client1.otus.lan_**, ip-адресом - **_192.168.56.11_**  
 с именем **_client2.otus.lan_**, ip-адресом - **_192.168.56.12_**  
 
-с ОС CentOS 9 Stream, каждая ВМ будет иметь по 1ГБ ОЗУ и по одному ядру CPU.  
+с ОС CentOS 8 Stream, каждая ВМ будет иметь по 2ГБ ОЗУ и по одному ядру CPU.  
 
 ### 1. Установка FreeIPA сервера
 
 Для начала нам необходимо настроить [FreeIPA-сервер](https://www.freeipa.org/page/About). Подключимся к нему по SSH с помощью команды: ```vagrant ssh ipa.otus.lan``` и перейдём в root-пользователя: ```sudo -i```  
 
->На момент написания ДЗ выдавала ошибку при обновлении или установки пакетов
+>На момент написания ДЗ ОС Centos8 выдавала ошибку при обновлении или установки пакетов
 >
 >Решение:
 >в консоли выполнить команду:  
 >cd /etc/yum.repos.d/ | sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* | sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
   
-  
+
 Сделаем настройку FreeIPA-сервера:  
 Установим часовой пояс: ```timedatectl set-timezone Europe/Moscow```  
 Установим утилиту chrony: ```yum install -y chrony```  
@@ -63,5 +63,6 @@ SELINUXTYPE=targeted
 Установим модуль DL1: ```yum install -y @idm:DL1```  
 Установим FreeIPA-сервер: ```yum install -y ipa-server```  
 
-
+Запустим скрипт установки: ```ipa-server-install```
+>Потребуется указать параметры нашего LDAP-сервера, после ввода каждого параметра >нажимаем Enter, если нас устраивает параметр, указанный в квадратных скобках, то >можно сразу нажимать Enter:
 
