@@ -80,3 +80,24 @@ __*The ipa-server-install command was successful*__
 ![скрин3](./img/Screenshot_3.png) 
 ![скрин4](./img/Screenshot_4.png) 
 ![скрин5](./img/Screenshot_5.png) 
+
+После успешной установки **FreeIPA**, проверим, что сервер Kerberos может выдать нам билет: 
+```bash
+[root@ipa ~]# kinit admin
+Password for admin@OTUS.LAN:
+[root@ipa ~]# klist
+Ticket cache: KCM:0
+Default principal: admin@OTUS.LAN
+
+Valid starting     Expires            Service principal
+05/04/23 16:36:40  05/05/23 16:36:35  krbtgt/OTUS.LAN@OTUS.LAN
+[root@ipa ~]#
+```
+Для удаление полученного билета воспользуемся командой: _kdestroy_  
+
+Мы можем зайти в Web-интерфейс нашего FreeIPA-сервера, для этого на нашей хостовой машине нужно прописать следующую строку в файле Hosts:
+
+```192.168.56.10 ipa.otus.lan```  
+
+![скрин4](./img/Screenshot_6.png) 
+![скрин5](./img/Screenshot_7.png) 
