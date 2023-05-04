@@ -22,15 +22,15 @@
 
 Для начала нам необходимо настроить [FreeIPA-сервер](https://www.freeipa.org/page/About). Подключимся к нему по SSH с помощью команды: ```vagrant ssh ipa.otus.lan``` и перейдём в root-пользователя: ```sudo -i```  
 
-Сделаем настройку FreeIPA-сервера: 
-Установим часовой пояс: ```timedatectl set-timezone Europe/Moscow```
-Установим утилиту chrony: ```yum install -y chrony```
-Запустим chrony и добавим его в автозагрузку: ```systemctl enable chronyd —now```
-Выключим Firewall: ```systemctl stop firewalld```
-Отключим автозапуск Firewalld: ```systemctl disable firewalld```
-Остановим Selinux: ```setenforce 0```
-Для полного отключеия Selinux, поменяем в файле _/etc/selinux/config_, параметр _SELINUX_ на **disabled**
-```vi /etc/selinux/config```
+Сделаем настройку FreeIPA-сервера:  
+Установим часовой пояс: ```timedatectl set-timezone Europe/Moscow```  
+Установим утилиту chrony: ```yum install -y chrony```  
+Запустим chrony и добавим его в автозагрузку: ```systemctl enable chronyd —now```  
+Выключим Firewall: ```systemctl stop firewalld```  
+Отключим автозапуск Firewalld: ```systemctl disable firewalld```  
+Остановим Selinux: ```setenforce 0```  
+Для полного отключеия Selinux, поменяем в файле _/etc/selinux/config_, параметр _SELINUX_ на **disabled**  
+```vi /etc/selinux/config```  
 ```bash
 # This file controls the state of SELinux on the system.
 # SELINUX= can take one of these three values:
@@ -53,7 +53,8 @@ SELINUXTYPE=targeted
 192.168.56.10 ipa.otus.lan ipa
 ```
 
-Установим модуль DL1: ```yum install -y @idm:DL1```
-Установим FreeIPA-сервер: ```yum install -y ipa-server```
+Установим модуль DL1: ```yum install -y @idm:DL1```  
+Установим FreeIPA-сервер: ```yum install -y ipa-server```  
+
 
 
