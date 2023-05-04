@@ -25,7 +25,7 @@
 Сделаем настройку FreeIPA-сервера:  
 Установим часовой пояс: ```timedatectl set-timezone Europe/Moscow```  
 Установим утилиту chrony: ```yum install -y chrony```  
-Запустим chrony и добавим его в автозагрузку: ```systemctl enable chronyd —now```  
+Запустим chrony и добавим его в автозагрузку: ```systemctl enable chronyd --now```  
 Выключим Firewall: ```systemctl stop firewalld```  
 Отключим автозапуск Firewalld: ```systemctl disable firewalld```  
 Остановим Selinux: ```setenforce 0```  
