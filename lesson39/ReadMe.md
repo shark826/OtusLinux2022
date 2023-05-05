@@ -157,12 +157,49 @@ client2.otus.lan ansible_host=192.168.56.12 ansible_user=vagrant ansible_ssh_pri
 
 После подключения хостов к FreeIPA-сервер нужно проверить, что мы можем получить билет от Kerberos сервера: ```kinit admin```
 
+```bash
+[root@client1 ~]# kinit admin
+Password for admin@OTUS.LAN:
+[root@client1 ~]# klist
+Ticket cache: KCM:0
+Default principal: admin@OTUS.LAN
+
+Valid starting     Expires            Service principal
+05/05/23 14:20:15  05/06/23 14:20:11  krbtgt/OTUS.LAN@OTUS.LAN
+[root@client1 ~]#
+```
 
 Давайте проверим работу LDAP, для этого на сервере FreeIPA создадим пользователя и попробуем залогиниться к клиенту:
 Авторизируемся на сервере: ```kinit admin```  
-Создадим пользователя otus-user  
+
+```bash
+[root@ipa ~]# kinit admin
+Password for admin@OTUS.LAN:
+[root@ipa ~]# klist
+Ticket cache: KCM:0
+Default principal: admin@OTUS.LAN
+
+Valid starting     Expires            Service principal
+05/05/23 14:14:09  05/06/23 14:14:05  krbtgt/OTUS.LAN@OTUS.LAN
+[root@ipa ~]#
+```  
+
+Создадим пользователя otus-user  с паролем 1234567890
 ```bash
 [root@ipa ~]# ipa user-add otus-user --first=Otus --last=User --password
 ```
+![скрин10](./img/Screenshot_10.png)  
 
-![скрин8](./img/Screenshot_8.png)
+
+На хосте client1 или client2 выполним команду ```kinit otus-user```
+
+
+![скрин11](./img/Screenshot_11.png) 
+
+
+На клиенте 2 уже просит ввести измененый пароль  
+
+
+![скрин12](./img/Screenshot_12.png)  
+
+На этом процесс добавления хостов к FreeIPA-серверу завершен.
