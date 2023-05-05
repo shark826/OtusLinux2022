@@ -99,8 +99,8 @@ Valid starting     Expires            Service principal
 
 ```192.168.56.10 ipa.otus.lan```  
 
-![скрин4](./img/Screenshot_6.png) 
-![скрин5](./img/Screenshot_7.png) 
+![скрин6](./img/Screenshot_6.png) 
+![скрин7](./img/Screenshot_7.png) 
 
 Откроется веб-консоль упрвления FreeIPA. Данные во FreeIPA можно вносить как через веб-консоль, так и средствами коммандной строки.  
 
@@ -149,3 +149,18 @@ client2.otus.lan ansible_host=192.168.56.12 ansible_user=vagrant ansible_ssh_pri
     shell: echo -e "yes\nyes" | ipa-client-install --mkhomedir --domain=OTUS.LAN --server=ipa.otus.lan --no-ntp -p admin -w 12345678
 ```
 
+Выполним на хостовой машине добавление хостов к LDAP серверу через ansible командой:  
+```ansible-playbook ./ansible/provision.yml```
+
+
+После подключения хостов к FreeIPA-сервер нужно проверить, что мы можем получить билет от Kerberos сервера: ```kinit admin```
+
+
+Давайте проверим работу LDAP, для этого на сервере FreeIPA создадим пользователя и попробуем залогиниться к клиенту:
+Авторизируемся на сервере: ```kinit admin```  
+Создадим пользователя otus-user  
+```bash
+[root@ipa ~]# ipa user-add otus-user --first=Otus --last=User --password
+```
+
+![скрин8](./img/Screenshot_8.png)
