@@ -108,3 +108,11 @@ Valid starting     Expires            Service principal
 
 ### 2. Пишем ansible playbook для конфигурации клиента
 
+В каталоге с нашей лабораторной работой создадим каталог Ansible: ```mkdir ansible```
+В каталоге ansible создадим файл _hosts_ со следующими параметрами:
+
+```bash
+[clients]
+client1.otus.lan ansible_host=192.168.56.11 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/client1.otus.lan/virtualbox/private_key
+client2.otus.lan ansible_host=192.168.56.12 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/client2.otus.lan/virtualbox/private_key
+```
