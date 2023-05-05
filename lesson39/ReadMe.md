@@ -69,7 +69,7 @@ SELINUXTYPE=targeted
 Далее начнётся процесс установки. Процесс установки занимает примерно 10-15 минут (иногда время может быть другим). Если мастер успешно выполнит настройку FreeIPA то в конце мы получим сообщение: 
 __*The ipa-server-install command was successful*__
 
-При вводе параметров установки мы вводили 2 пароля:  
+При вводе параметров установки мы вводили 2 пароля (не буду мудрить пароль будет 12345678):  
 **Directory Manager** password — это пароль администратора сервера каталогов, У этого пользователя есть полный доступ к каталогу.  
 **IPA admin** password — пароль от пользователя FreeIPA admin
 
@@ -116,3 +116,36 @@ Valid starting     Expires            Service principal
 client1.otus.lan ansible_host=192.168.56.11 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/client1.otus.lan/virtualbox/private_key
 client2.otus.lan ansible_host=192.168.56.12 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/client2.otus.lan/virtualbox/private_key
 ```
+
+Далее создадим файл [provision.yml](provision.yml) в котором непосредственно будет выполняться настройка клиентов.
+
+[Jinja-шаблон](./ansible/hosts.j2) файла _/etc/hosts_ содержит следующие строки:  
+
+```bash
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.56.10 ipa.otus.lan ipa
+```
+
+При добавлении хоста к домену мы можем просто ввести команду **_ipa-client-install_** и следовать мастеру подключения к FreeIPA-серверу.
+
+Однако команда позволяет нам сразу задать требуемые нам параметры:  
+--domain — имя домена  
+--server — имя FreeIPA-сервера  
+--no-ntp — не настраивать дополнительно ntp (мы уже настроили chrony)  
+-p — имя админа домена  
+-w — пароль администратора домена (IPA password)  
+--mkhomedir — создать директории пользователей при их первом логине  
+
+Если мы сразу укажем все параметры, то можем добавить эту команду в Ansible и автоматизировать процесс добавления хостов в домен. 
+
+Блок с таким TASK будет выглядить следующим образом:  
+
+
+```bash
+
+ #Запуск скрипта добавления хоста к серверу
+  - name: add host to ipa-server
+    shell: echo -e "yes\nyes" | ipa-client-install --mkhomedir --domain=OTUS.LAN --server=ipa.otus.lan --no-ntp -p admin -w 12345678
+```
+
