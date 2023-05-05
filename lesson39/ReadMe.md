@@ -150,7 +150,7 @@ client2.otus.lan ansible_host=192.168.56.12 ansible_user=vagrant ansible_ssh_pri
 ```
 
 Выполним на хостовой машине добавление хостов к LDAP серверу через ansible командой:  
-```ansible-playbook ./ansible/provision.yml```
+```ansible-playbook ./ansible/provision.yml -kK```
 
 
 После подключения хостов к FreeIPA-сервер нужно проверить, что мы можем получить билет от Kerberos сервера: ```kinit admin```

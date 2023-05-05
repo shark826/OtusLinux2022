@@ -4,6 +4,9 @@
   #Выполнять действия от root-пользователя
   become: yes
   tasks:
+  # Заменить Repo
+  - name: Add mirrorlist to repo
+    shell: cd /etc/yum.repos.d/ | sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* | sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
   #Установка текстового редактора Vim и chrony
   - name: install softs on CentOS
     yum:
