@@ -63,7 +63,7 @@ cp -r /mnt/* /iso
 5. Ставим права 755 на каталог /iso: ```chmod -R 755 /iso```
 6. Настраиваем доступ по HTTP для файлов из каталога /iso:  
 Создаем конфигурационный файл: ```vi /etc/httpd/conf.d/pxeboot.conf```  
-Добавляем следующее содержимое в файл:  
+Добавляем следующее содержимое в файл[./ansible/templates/pxeboot.conf](pxeboot).conf:  
 ```bash
 Alias /centos8 /iso
 #Указываем адрес директории /iso
