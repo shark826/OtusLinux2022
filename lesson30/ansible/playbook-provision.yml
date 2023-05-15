@@ -1,0 +1,90 @@
+name: Set up PXE Server
+  #Указываем имя хоста или группу, которые будем настраивать
+  hosts: pxeserver
+  #Параметр выполнения модулей от root-пользователя
+  become: yes
+  #Указание файла с дополнителыми переменными (понадобится при добавлении темплейтов)
+  vars_files:
+    - defaults/main.yml
+  tasks:
+  #sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*
+  - name: set up repo
+    replace:
+      path: "{{ item }}"
+      regexp: 'mirrorlist'
+      replace: '#mirrorlist'
+    with_items:
+      - /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+      - /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
+
+#sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+  - name: set up repo
+    replace:
+      path: "{{ item }}"
+      regexp: '#baseurl=http://mirror.centos.org'
+      replace: 'baseurl=http://vault.centos.org'
+    with_items:
+      - /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+      - /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
+
+#Установка пакета httpd (дополнительно сразу ставятся все пакеты, которые потребуются в данном задании)
+  - name: install softs on CentOS
+    yum:
+      name:
+        - vim
+        - wget
+        - epel-release
+        - httpd
+        - tftp-server
+        - dhcp-server
+        - nano
+      state: present
+      update_cache: true
+
+#Скачивание образа CentOS-Stream-8-x86_64-latest-boot.iso
+#Скачиваться будет долго.
+  - name: Download ISO image CentOS-Stream-8-x86_64-latest-boot.iso
+    get_url:
+      url: https://mirror.yandex.ru/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-latest-boot.iso
+      dest: /root/CentOS-Stream-8-x86_64-latest-boot.iso
+      mode: '0755'
+
+#Создание каталога /iso и назначение прав 755  
+  - name: Create ISO directory
+    file:
+      path: /iso
+      state: directory
+      mode: '0755'
+
+#Монтируем образ в каталог /mnt
+  - name: Mount ISO image
+    mount:
+      path: /mnt
+      src: /root/CentOS-Stream-8-x86_64-latest-boot.iso
+      fstype: iso9660
+      opts: ro,loop
+      state: mounted
+
+#Копируем все файлы из каталога /mnt в /iso
+  - name: copy ALL files from /mnt to /iso
+    copy:
+      src: /mnt/
+      dest: /iso
+      remote_src: yes 
+      directory_mode: yes
+
+#Копируем конфгурационный файл pxeboot.conf (Файл должен быть предварительно создан в каталаге templates)
+  - name: set up httpd config
+    template:
+      src: pxeboot.conf
+      dest: /etc/httpd/conf.d/pxeboot.conf 
+      owner: root
+      group: root
+      mode: 0640
+
+#Перезупускаем httpd и добавляем службу в автозагрузку
+  - name: restart httpd
+    service:
+      name: httpd
+      state: restarted
+      enabled: true
