@@ -81,3 +81,48 @@ Alias /centos8 /iso
 Если файлы доступны, значит веб-сервер настроен корректно
 
 
+Начало сценария для ansible [./ansible/playbook-provision-part1.yml](тут)
+
+### Установка и настройка TFTP-сервера   
+
+TFTP-сервер потребуется для отправки первичных файлов загрузки (vmlinuz, initrd.img и т. д.)
+
+1. Устанавливаем tftp-сервер: ```yum install tftp-server```
+2. Запускаем службу: ```systemctl start tftp.service```
+3. Рабочий каталог **/var/lib/tftpboot** где будут храниться файлы, которые будет отдавать TFTP-сервер.
+4. Автозапуск службы: ```systemctl enable tftp.service```
+5. Созаём каталог, в котором будем хранить наше меню загрузки:
+```mkdir /var/lib/tftpboot/pxelinux.cfg```
+6. Создаём меню-файл: ```vi /var/lib/tftpboot/pxelinux.cfg/default```
+Содержимое файла:  
+```bash
+default menu.c32
+prompt 0
+#Время счётчика с обратным отсчётом (установлено 15 секунд)
+timeout 15
+#Параметр использования локального времени
+ONTIME local
+#Имя «шапки» нашего меню
+menu title OTUS-Linux PXE Boot Menu
+       #Описание первой строки
+       label 1
+       #Имя, отображаемое в первой строке
+       menu label ^ Graph install CentOS 8.4
+       #Адрес ядра, расположенного на TFTP-сервере
+       kernel /vmlinuz
+       #Адрес файла initrd, расположенного на TFTP-сервере
+       initrd /initrd.img
+       #Получаем адрес по DHCP и указываем адрес веб-сервера
+       append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8
+       label 2
+       menu label ^ Text install CentOS 8.4
+       kernel /vmlinuz
+       initrd /initrd.img
+       append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8 text
+       label 3
+       menu label ^ rescue installed system
+       kernel /vmlinuz
+       initrd /initrd.img
+       append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8 rescue
+
+```

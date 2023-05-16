@@ -45,7 +45,8 @@ name: Set up PXE Server
 #Скачиваться будет долго.
   - name: Download ISO image CentOS-Stream-8-x86_64-latest-boot.iso
     get_url:
-      url: https://mirror.yandex.ru/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-latest-boot.iso
+      #url: https://mirror.yandex.ru/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-latest-boot.iso
+      url: http://10.13.120.6/cer/CentOS-Stream-8-x86_64-latest-boot.iso
       dest: /root/CentOS-Stream-8-x86_64-latest-boot.iso
       mode: '0755'
 
