@@ -147,4 +147,36 @@ cp pxelinux.0 ldlinux.c32 libmenu.c32 libutil.c32 menu.c32 vesamenu.c32 /var/lib
 systemctl restart tftp.service 
 systemctl enable tftp.service
 ```
-СценариЙ для Настройки TFTP-сервера ansible [./ansible/playbook-provision-part2.yml](тут)
+СценариЙ для Настройки TFTP-сервера ansible [./ansible/playbook-provision-part2.yml](тут)   
+
+
+### Установка и настройка DHCP-сервера   
+
+1. Устанавливаем DHCP-сервер: yum install dhcp-server
+2. Правим конфигурационный файл: vi /etc/dhcp/dhcpd.conf
+```bash
+option space pxelinux;
+option pxelinux.magic code 208 = string;
+option pxelinux.configfile code 209 = text;
+option pxelinux.pathprefix code 210 = text;
+option pxelinux.reboottime code 211 = unsigned integer 32;
+option architecture-type code 93 = unsigned integer 16;
+
+#Указываем сеть и маску подсети, в которой будет работать DHCP-сервер
+subnet 10.0.0.0 netmask 255.255.255.0 {
+        #Указываем шлюз по умолчанию, если потребуется
+        #option routers 10.0.0.1;
+        #Указываем диапазон адресов
+        range 10.0.0.100 10.0.0.120;
+
+        class "pxeclients" {
+          match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+          #Указываем адрес TFTP-сервера
+          next-server 10.0.0.20;
+          #Указываем имя файла, который надо запустить с TFTP-сервера
+          filename "pxelinux.0";
+        }
+}
+```   
+
+СценариЙ для Настройки DHCP-сервера ansible [./ansible/playbook-provision-part3.yml](тут)   
