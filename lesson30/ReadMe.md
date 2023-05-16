@@ -180,3 +180,4 @@ subnet 10.0.0.0 netmask 255.255.255.0 {
 ```   
 
 СценариЙ для Настройки DHCP-сервера ansible [./ansible/playbook-provision-part3.yml](тут)   
+

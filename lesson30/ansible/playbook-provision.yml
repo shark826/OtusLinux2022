@@ -1,4 +1,5 @@
-name: Set up PXE Server
+---
+- name: Set up PXE Server
   #Указываем имя хоста или группу, которые будем настраивать
   hosts: pxeserver
   #Параметр выполнения модулей от root-пользователя
