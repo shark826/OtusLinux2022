@@ -113,16 +113,38 @@ menu title OTUS-Linux PXE Boot Menu
        #Адрес файла initrd, расположенного на TFTP-сервере
        initrd /initrd.img
        #Получаем адрес по DHCP и указываем адрес веб-сервера
-       append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8
+       append ip=eth1:dhcp inst.repo=http://10.0.0.20/centos8
        label 2
        menu label ^ Text install CentOS 8.4
        kernel /vmlinuz
        initrd /initrd.img
-       append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8 text
+       append ip=eth1:dhcp inst.repo=http://10.0.0.20/centos8 text
        label 3
        menu label ^ rescue installed system
        kernel /vmlinuz
        initrd /initrd.img
-       append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8 rescue
+       append ip=eth1:dhcp inst.repo=http://10.0.0.20/centos8 rescue
 
 ```
+7. Распакуем файл syslinux-tftpboot-6.04-5.el8.noarch.rpm:
+rpm2cpio /iso/BaseOS/Packages/syslinux-tftpboot-6.04-5.el8.noarch.rpm | cpio -dimv
+
+8. После распаковки в каталоге пользователя root будет создан каталог tftpboot из которого потребуется скопировать следующие файлы:
+- pxelinux.0
+- ldlinux.c32
+- libmenu.c32
+- libutil.c32
+- menu.c32
+- vesamenu.c32
+```bash
+cd tftpboot
+cp pxelinux.0 ldlinux.c32 libmenu.c32 libutil.c32 menu.c32 vesamenu.c32 /var/lib/tftpboot/
+```
+9. Также в каталог /var/lib/tftpboot/ нам потребуется скопировать файлы initrd.img и vmlinuz, которые располагаются в каталоге /iso/images/pxeboot/:
+```cp /iso/images/pxeboot/{initrd.img,vmlinuz} /var/lib/tftpboot/```  
+10. Далее перезапускаем TFTP-сервер и добавляем его в автозагрузку:
+```bash
+systemctl restart tftp.service 
+systemctl enable tftp.service
+```
+СценариЙ для Настройки TFTP-сервера ansible [./ansible/playbook-provision-part2.yml](тут)
