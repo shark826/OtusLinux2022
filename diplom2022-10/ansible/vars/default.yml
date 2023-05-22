@@ -1,0 +1,14 @@
+#System Settings
+php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'php-soap', 'php-intl', 'php-zip' ]
+
+#MySQL Settings
+mysql_root_password: "mysql_root_password"
+mysql_db: "wordpress"
+mysql_user: "sammy"
+mysql_password: "password"
+
+#HTTP Settings
+http_host: "otus2022"
+http_conf: "otus2022.conf"
+http_port: "80"
+https_port: "443"
