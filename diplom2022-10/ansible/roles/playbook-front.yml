@@ -6,7 +6,8 @@
   become: yes
   #Указание файла с дополнителыми переменными (понадобится при добавлении темплейтов)
   vars_files:
-    - vars/default.yml
+    - ../vars/default.yml
+    
   tasks:
   #Update system
   - name: Update system
@@ -22,7 +23,7 @@
 
   - name: Install LAMP Packages
     apt: name={{ item }} update_cache=yes state=latest
-    loop: [ 'iptables','apache2', 'python3-pymysql', 'php', 'php-mysql', 'libapache2-mod-php' ]
+    loop: [ 'mc','curl','iptables','apache2', 'python3-pymysql', 'php', 'php-mysql', 'libapache2-mod-php' ]
     tags: [ system ]
   
   # Install PHP Extensions
@@ -55,7 +56,7 @@
       protocol: tcp
       jump: ACCEPT
       destination_port: "{{ item }}"
-    loop: [ '22','80','443','3306','9090', '9093', '9094', '9100' ]
+    loop: [ '22','53','80','443','3306','9090', '9093', '9094', '9100' ]
 
   - name: Allow UDP Ports
     iptables:
@@ -64,7 +65,16 @@
       action: insert
       protocol: udp
       jump: ACCEPT
-      destination_port: '9094'
+      destination_port: "{{ item }}"
+    loop: [ '22','53','80','443','3306','9090', '9093', '9094', '9100' ]
+
+  - name: Allow UDP Ports
+    iptables:
+      chain: INPUT
+      action: insert
+      ctstate: ESTABLISHED,RELATED
+      jump: ACCEPT
+      
 
   - name: Set the policy for the INPUT chain to DROP
     iptables:
