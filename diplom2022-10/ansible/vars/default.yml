@@ -4,7 +4,7 @@ php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'p
 #MySQL Settings
 mysql_root_password: "mysql_root_password"
 mysql_db: "wordpress"
-mysql_user: "sammy"
+mysql_user: "otus"
 mysql_password: "password"
 
 #HTTP Settings

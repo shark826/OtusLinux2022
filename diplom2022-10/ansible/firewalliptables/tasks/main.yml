@@ -1,0 +1,49 @@
+---
+# tasks file for firewalliptables
+# Security Settings For Debian
+  
+  - name: Iptables flush filter
+    iptables:
+      chain: "{{ item }}"
+      flush: yes
+    with_items:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
+
+  # PING
+  - name: Allow icmp Ping
+    iptables:
+        chain: INPUT
+        protocol: icmp
+        jump: ACCEPT
+        
+  - name: Allow TCP Ports
+    iptables:
+      chain: INPUT
+      rule_num: '1'
+      action: insert
+      protocol: tcp
+      jump: ACCEPT
+      destination_port: "{{ item }}"
+    loop: [ '22','53','80','443','3306','9090', '9093', '9094', '9100' ]
+
+  - name: Allow UDP Ports
+    iptables:
+      chain: INPUT
+      rule_num: '1'
+      action: insert
+      protocol: udp
+      jump: ACCEPT
+      destination_port: "{{ item }}"
+    loop: [ '22','53','80','443','3306','9090', '9093', '9094', '9100' ]
+
+  - name: Allow UDP Ports
+    iptables:
+      chain: INPUT
+      action: insert
+      ctstate: ESTABLISHED,RELATED
+      jump: ACCEPT
+      
+
+  - name: Set the policy for the INPUT chain to DROP
+    iptables:
+      chain: INPUT
+      policy: DROP
