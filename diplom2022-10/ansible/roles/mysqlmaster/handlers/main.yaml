@@ -1,0 +1,10 @@
+---
+- name: restart mysqld
+  service: 
+    name: mysqld 
+    state: restarted
+- name: reload nfsd
+  systemd: 
+    name: nfs-server
+    state: reloaded
+...

@@ -1,0 +1,119 @@
+---
+- name: Install Percona repo
+  yum:
+    name: https://downloads.percona.com/downloads/percona-release/percona-release-1.0-27/redhat/percona-release-1.0-27.noarch.rpm
+    state: present
+- name: install Percona server
+  yum:
+    name: Percona-Server-server-57
+    state: present
+
+- name: install MySQL Python
+  yum:
+    name: MySQL-python
+    state: present
+
+- name: Copy conf file
+  copy:
+    src={{ item }}
+    dest=/etc/my.cnf.d/
+  with_fileglob:
+    - conf.d/*
+
+- name: Start the MySQL service
+  service: name=mysqld state=started enabled=true
+
+- name: Change mysql root password and keep track in
+  become: true
+  shell: |
+    password_match=`awk '/A temporary password is generated for/ {a=$0} END{ print a }' /var/log/mysqld.log | awk '{print $(NF)}'`
+    echo $password_match
+    mysql -uroot -p$password_match --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'RootPa!!23'; flush privileges; "
+    echo "[client]"
+    user=root
+    password=RootPa!!23 > /root/.my.cnf
+  args:
+    creates: /root/.my.cnf
+  register: change_temp_pass
+  notify: restart mysqld
+- meta: flush_handlers
+- debug:
+    var: change_temp_pass
+
+- name: Create replication user
+  shell: |
+    mysql -uroot -pRootPa!!23 -e "CREATE USER 'replication_user'@'%' IDENTIFIED WITH mysql_native_password BY 'RootPa!!23'; GRANT REPLICATION SLAVE ON *.* TO 'replication_user'@'%'; FLUSH PRIVILEGES; SET @@GLOBAL.read_only = ON;"
+
+
+
+- name: unset global read only
+  shell: |
+    mysql -uroot -pRootPa!!23 -e "SET @@GLOBAL.read_only = OFF;"
+
+- name: Remove all anonymous user accounts
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Remove the MySQL test database
+  mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+
+- name: Creates database wordpes
+  mysql_db:
+    name: "{{ mysql_db }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create MySQL user for DB wordpres
+  mysql_user:
+    name: "{{ mysql_user }}"
+    host: "%"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_db }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Copy backup to server
+  copy:
+    src: wpotus.sql
+    dest: /tmp/wpotus.sql
+
+- name: Restore DB wordpres
+  shell: |
+    mysql -uroot -pRootPa!!23 -D wordpres < /tmp/wpotus.sql
+
+- name: Create shared folder
+  file:
+    path: /var/share
+    state: directory
+    mode: '777'
+
+- name: Copy nfs config
+  copy:
+    src: exports
+    dest: "/etc/exports"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: reload nfsd
+
+- name: Start nfsd
+  systemd:
+    name: nfs-server
+    state: started
+    enabled: true
+
+- name: Dump DB wordpres
+  shell: |
+    mysqldump --all-databases --triggers --routines --master-data --ignore-table=wordpres.events_on_demand --ignore-table=wordpres.v_same_event -uroot -pRootPa!!23 > /var/share/master.sql
+...

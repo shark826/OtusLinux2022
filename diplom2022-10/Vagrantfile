@@ -22,13 +22,13 @@ Vagrant.configure("2") do |config|
     end
   
    
-    frontserver.vm.provision "ansible" do |ansible|
-      ansible.playbook = "./ansible/roles/playbook-front.yml"
-      ansible.become = "true"
-      ansible.inventory_path = "./ansible/hosts/hostfront"
-      ansible.host_key_checking = "false"
-      ansible.limit = "all"
-    end
+    # frontserver.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "./ansible/roles/playbook-front.yml"
+    #   ansible.become = "true"
+    #   ansible.inventory_path = "./ansible/hosts/hostfront"
+    #   ansible.host_key_checking = "false"
+    #   ansible.limit = "all"
+    # end
   
   end
 

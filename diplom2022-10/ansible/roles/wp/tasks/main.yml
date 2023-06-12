@@ -1,0 +1,28 @@
+---
+# tasks file for wp
+  - name: Copy backup to server
+    copy:
+      src: wpotus.tar
+      dest: /tmp/wpotus.tar
+
+
+  - name: Extract backup to server
+    unarchive:
+      src: /tmp/wpotus.tar
+      dest: /
+      remote_src: yes
+
+  - name: Copy wp-config to server
+    copy:
+      src: wp-config.php
+      dest: /var/www/html/wp-config.php
+
+  - name: Copy adminer to server
+    copy:
+      src: adminermysql.php
+      dest: /var/www/html/adminermysql.php    
+
+  - name: Remove file index.html
+    file:
+      path: /var/www/html/index.html
+      state: absent

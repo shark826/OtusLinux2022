@@ -1,0 +1,81 @@
+---
+- name: Install Percona repo
+  yum:
+    name: https://downloads.percona.com/downloads/percona-release/percona-release-1.0-27/redhat/percona-release-1.0-27.noarch.rpm
+    state: present
+
+- name: install Percona server
+  yum:
+    name: Percona-Server-server-57
+    state: present
+
+- name: install MySQL Python
+  yum:
+    name: MySQL-python
+    state: present
+
+- name: Copy conf file
+  copy:
+    src={{ item }}
+    dest=/etc/my.cnf.d/
+  with_fileglob:
+    - conf.d/*
+
+- name: mount shared folder
+  mount:
+    src: 192.168.56.150:/var/share
+    path: /mnt
+    state: mounted
+    fstype: nfs
+
+- name: Start the MySQL service
+  service: name=mysqld state=started enabled=true
+
+- name: Change mysql root password and keep track in
+  become: true
+  shell: |
+    password_match=`awk '/A temporary password is generated for/ {a=$0} END{ print a }' /var/log/mysqld.log | awk '{print $(NF)}'`
+    echo $password_match
+    mysql -uroot -p$password_match --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'RootPa!!23'; flush privileges; "
+    echo "[client]"
+    user=root
+    password=RootPa!!23 > /root/.my.cnf
+  args:
+    creates: /root/.my.cnf
+  register: change_temp_pass
+  notify: restart mysqld
+- meta: flush_handlers
+- debug:
+    var: change_temp_pass
+
+- name: Creates database wordpres
+  mysql_db:
+    name: "{{ mysql_db }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create MySQL user for DB wordpres
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_db }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Reset master
+  shell: |
+    mysql -uroot -pRootPa!!23 -e "reset master;"
+
+- name: Restore DB wordpres
+  shell: |
+    mysql -uroot -pRootPa!!23 -D wordpres < /mnt/master.sql
+
+
+- name: Settings Slave
+  shell: |
+    mysql -uroot -pRootPa!!23 -e "SET @@GLOBAL.read_only = ON; CHANGE MASTER TO MASTER_HOST = '192.168.56.150', MASTER_PORT = 3306, MASTER_USER = 'replication_user', MASTER_PASSWORD = 'RootPa!!23', MASTER_AUTO_POSITION = 1; START SLAVE;"
+ 
+
+

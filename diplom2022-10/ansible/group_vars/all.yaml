@@ -1,0 +1,12 @@
+---
+mysql_db: wordpres
+mysql_user: wpuser
+mysql_password: 'Pa!!1234'
+mysql_root_password: 'RootPa!!23'
+
+#HTTP Settings
+http_host: "default-ssl"
+http_conf: "default-ssl.conf"
+http_port: "80"
+
+...

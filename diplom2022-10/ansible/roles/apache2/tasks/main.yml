@@ -1,0 +1,14 @@
+---
+# tasks file for apache2
+#Install LAMP  
+
+  - name: Install LAMP Packages
+    apt: name={{ item }} update_cache=yes state=latest
+    loop: [ 'mc','curl','iptables','apache2', 'python3-pymysql', 'php', 'php-mysql', 'libapache2-mod-php' ]
+    tags: [ system ]
+
+  # Install PHP Extensions
+  - name: Install PHP Extensions
+    apt: name={{ item }} update_cache=yes state=latest
+    loop: "{{ php_modules }}"
+    tags: [ system ]
