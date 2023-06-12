@@ -7,7 +7,7 @@
     - mysqlmaster
 
 - name: Install MySQL Slave
-  hosts: slave
+  hosts: mysqlservernode2
   become: true
   roles:
     - updateos
