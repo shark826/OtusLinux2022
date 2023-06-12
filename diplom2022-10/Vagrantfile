@@ -21,14 +21,7 @@ Vagrant.configure("2") do |config|
       #vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     end
   
-   
-    # frontserver.vm.provision "ansible" do |ansible|
-    #   ansible.playbook = "./ansible/roles/playbook-front.yml"
-    #   ansible.become = "true"
-    #   ansible.inventory_path = "./ansible/hosts/hostfront"
-    #   ansible.host_key_checking = "false"
-    #   ansible.limit = "all"
-    # end
+
   
   end
 
@@ -41,24 +34,13 @@ Vagrant.configure("2") do |config|
                        ip: "10.0.0.20", 
                        virtualbox__intnet: 'internalnet'
   
-    # frontserver.vm.network "forwarded_port", guest: 80, host: 8081
-    # frontserver.vm.network :private_network, 
-    #                    ip: "192.168.56.10",
-    #                    adapter: 3
+
     mysqlservernode1.vm.provider "virtualbox" do |vb|
       vb.memory = "2048"
       
     end
   
-   
-    # mysqlservernode1.vm.provision "ansible" do |ansible|
-    #   ansible.playbook = "playbook-provision.yml"
-    #   ansible.become = "true"
-    #   ansible.inventory_path = "hosts"
-    #   ansible.host_key_checking = "false"
-    #   ansible.limit = "all"
-    # end
-  
+
   end
     
 
@@ -70,24 +52,13 @@ Vagrant.configure("2") do |config|
                        ip: "10.0.0.21", 
                        virtualbox__intnet: 'internalnet'
   
-    # frontserver.vm.network "forwarded_port", guest: 80, host: 8081
-    # frontserver.vm.network :private_network, 
-    #                    ip: "192.168.56.10",
-    #                    adapter: 3
+   
     mysqlservernode2.vm.provider "virtualbox" do |vb|
       vb.memory = "2048"
       
     end
   
-   
-    # mysqlservernode2.vm.provision "ansible" do |ansible|
-    #   ansible.playbook = "playbook-provision.yml"
-    #   ansible.become = "true"
-    #   ansible.inventory_path = "hosts"
-    #   ansible.host_key_checking = "false"
-    #   ansible.limit = "all"
-    # end
-  
+
   end
 
 
@@ -98,24 +69,27 @@ Vagrant.configure("2") do |config|
     backupserver.vm.network :private_network, 
                        ip: "10.0.0.30", 
                        virtualbox__intnet: 'internalnet'
-  
-    # frontserver.vm.network "forwarded_port", guest: 80, host: 8081
-    # frontserver.vm.network :private_network, 
-    #                    ip: "192.168.56.10",
-    #                    adapter: 3
+
     backupserver.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
       
     end
+
   
-   
-    # backupserver.vm.provision "ansible" do |ansible|
-    #   ansible.playbook = "playbook-provision.yml"
-    #   ansible.become = "true"
-    #   ansible.inventory_path = "hosts"
-    #   ansible.host_key_checking = "false"
-    #   ansible.limit = "all"
-    # end
+    config.vm.define "promethgraf" do |promethgraf|
+      promethgraf.vm.box = 'centos/7'
+         
+      promethgraf.vm.host_name = 'promethgraf'
+      promethgraf.vm.network :private_network, 
+                         ip: "10.0.0.40", 
+                         virtualbox__intnet: 'internalnet'
+         
+      promethgraf.vm.provider "virtualbox" do |vb|
+        vb.memory = "1024"
+        
+      end
+  
+
   
   end
     

@@ -2,7 +2,7 @@
 
 ## Проектная работа
 
-### Резервное копирование. Настраиваем бэкапы  
+### Развертывание сайта на WordPress, Percona Server for MySQL, Borg Backup, Prometheus & Grafana    
   
 **Создаём виртуальные машины**  
   
