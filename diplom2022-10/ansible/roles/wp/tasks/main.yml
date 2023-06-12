@@ -17,6 +17,11 @@
       src: wp-config.php
       dest: /var/www/html/wp-config.php
 
+  - name: Copy .htacces to server
+    copy:
+      src: .htaccess
+      dest: /var/www/html/.htaccess  
+
   - name: Copy adminer to server
     copy:
       src: adminermysql.php
@@ -26,3 +31,16 @@
     file:
       path: /var/www/html/index.html
       state: absent
+
+
+# Apache enable SSL
+  - name: enabled mod_ssl
+    apache2_module: name=ssl state=present
+
+  - name: a2ensite {{ http_host }}
+    command: a2ensite {{ http_conf }}
+
+  - name: restart apache
+    systemd:
+      name: apache2
+      state: restarted

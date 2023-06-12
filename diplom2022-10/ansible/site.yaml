@@ -1,20 +1,25 @@
 ---
 - name: Install MySQL Master
-  hosts: master
+  hosts: mysqlservernode1
   become: true
   roles:
-    - master
+    - updateos
+    - mysqlmaster
 
 - name: Install MySQL Slave
   hosts: slave
   become: true
   roles:
-    - slave
+    - updateos
+    - mysqlslave
 
 - name: Install Apache+WP
-  hosts: wp
+  hosts: frontserver
   become: true
   roles:
-    - wpapache
+    - updateos
+    - apache2
+    - wp
+    - firewalliptables
   tags: wpapache
 ...
