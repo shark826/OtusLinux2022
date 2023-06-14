@@ -3,7 +3,7 @@
   hosts: web
   become: true
   roles:
-  - webserver
+  #- webserver
   - node-exporter
 
 - name: Install Prometheus

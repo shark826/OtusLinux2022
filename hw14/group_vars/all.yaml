@@ -14,7 +14,7 @@ servername: otus.dz.loc
 # variables for node_exporter
 
 node-exporter-version: "1.1.2"
-node-exporter-bin: /usr/local/bin/node-exporter
+node_exporter_bin: /usr/local/bin/node_exporter
 node-exporter-user: node-exporter
 node-exporter-group: "{{ node-exporter-user }}"
 node-exporter-dir-conf: /etc/node-exporter
