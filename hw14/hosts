@@ -1,5 +1,0 @@
-[webservers]
-web ansible_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=.vagrant/machines/web/virtualbox/private_key
-
-[monitor]
-prometheus ansible_host=127.0.0.1 ansible_port=2200 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=.vagrant/machines/prometheus/virtualbox/private_key
