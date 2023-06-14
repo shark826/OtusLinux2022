@@ -1,0 +1,7 @@
+[nginx-server]
+webserver
+[prometheus]
+prometheus
+[grafana]
+prometheus
+

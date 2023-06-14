@@ -1,0 +1,15 @@
+---
+- name: Install Nginx and Node_Exporter
+  hosts: webserver
+  become: true
+  roles:
+  - nginx
+  - node_exporter
+
+- name: Install Prometheus
+  hosts: prometheus
+  become: true
+  roles:
+    - prometheus
+    - grafana
+...
