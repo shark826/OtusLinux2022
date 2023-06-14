@@ -3,8 +3,8 @@
   hosts: web
   become: true
   roles:
-  - nginx
-  - node_exporter
+  - webserver
+  - node-exporter
 
 - name: Install Prometheus
   hosts: prometheus
