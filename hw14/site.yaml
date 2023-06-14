@@ -1,25 +1,15 @@
 ---
-- name: Install MySQL Master
-  hosts: mysqlservernode1
+- name: Install Nginx and Node_Exporter
+  hosts: web
   become: true
   roles:
-    - updateos
-    - mysqlmaster
+  - nginx
+  - node_exporter
 
-- name: Install MySQL Slave
-  hosts: mysqlservernode2
+- name: Install Prometheus
+  hosts: prometheus
   become: true
   roles:
-    - updateos
-    - mysqlslave
-
-- name: Install Apache+WP
-  hosts: frontserver
-  become: true
-  roles:
-    - updateos
-    - apache2
-    - wp
-    - firewalliptables
-  tags: wpapache
+    - prometheus
+    - grafana
 ...
