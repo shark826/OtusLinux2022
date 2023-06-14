@@ -1,9 +1,5 @@
-[wordpres]
-frontserver ansible_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=../.vagrant/machines/frontserver/virtualbox/private_key
-[mysql]
-mysqlservernode1 ansible_host=127.0.0.1 ansible_port=2200 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=../.vagrant/machines/mysqlservernode1/virtualbox/private_key
-mysqlservernode2 ansible_host=127.0.0.1 ansible_port=2201 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=../.vagrant/machines/mysqlservernode2/virtualbox/private_key
-[backup]
-backupserver ansible_host=127.0.0.1 ansible_port=2202 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=../.vagrant/machines/backupserver/virtualbox/private_key
+[webservers]
+web ansible_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=.vagrant/machines/web/virtualbox/private_key
+
 [monitor]
-promethgraf ansible_host=127.0.0.1 ansible_port=2203 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=../.vagrant/machines/promethgraf/virtualbox/private_key
+prometheus ansible_host=127.0.0.1 ansible_port=2200 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_private_key_file=.vagrant/machines/prometheus/virtualbox/private_key
