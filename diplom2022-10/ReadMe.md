@@ -2,7 +2,7 @@
 
 ## Проектная работа
 
-### Развертывание сайта на WordPress, Percona Server for MySQL, Borg Backup, Prometheus & Grafana    
+### Развертывание сайта на WordPress, Percona Server for MySQL, Borg Backup, Prometheus & Grafana с общим хранилищем DRBD   
   
 **Создаём виртуальные машины**  
   
@@ -15,5 +15,12 @@
 с именем **_frontserver_**, ip-адресами - **_192.168.56.10 и 10.0.0.10_**  
 с именем **_mysqlservernode1_**, ip-адресом - **_10.0.0.20_**  
 с именем **_mysqlservernode2_**, ip-адресом - **_10.0.0.21_**  
-с именем **_backupserver_**, ip-адресом - **_10.0.0.30_**  
+с именем **_drbdnode1_**, ip-адресом - **_10.0.0.30_**  
+с именем **_drbdnode1_**, ip-адресом - **_10.0.0.31_**  
 с именем **_promethgraf_**, ip-адресом - **_10.0.0.40_**  
+с именем **_backupserver_**, ip-адресом - **_10.0.0.50_**  
+
+
+Схема 
+
+![sheme](./img/shem-of-diplom.jpg)  
