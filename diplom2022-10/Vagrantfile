@@ -61,6 +61,60 @@ Vagrant.configure("2") do |config|
 
   end
 
+  config.vm.define "drbdnode1" do |drbdnode|
+    drbdnode.vm.box = 'centos/7'
+       
+    drbdnode.vm.host_name = 'drbdnode1'
+    drbdnode.vm.network :private_network, 
+                       ip: "10.0.0.30", 
+                       virtualbox__intnet: 'internalnet'
+       
+    drbdnode.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+        unless File.exist?('./storage/node12.vdi')
+               vb.customize ['createhd', '--filename', './storage/node12.vdi', '--variant', 'Fixed', '--size', 2176]
+               needsController = true
+        end
+          vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"]
+          vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './storage/node12.vdi']
+    end
+    
+  end
+
+  config.vm.define "drbdnode2" do |drbdnode|
+    drbdnode.vm.box = 'centos/7'
+       
+    drbdnode.vm.host_name = 'drbdnode2'
+    drbdnode.vm.network :private_network, 
+                       ip: "10.0.0.31", 
+                       virtualbox__intnet: 'internalnet'
+       
+    drbdnode.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+        unless File.exist?('./storage/node22.vdi')
+               vb.customize ['createhd', '--filename', './storage/node22.vdi', '--variant', 'Fixed', '--size', 2176]
+               needsController = true
+        end
+          vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"]
+          vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './storage/node22.vdi']
+    end
+    
+  end
+
+
+  config.vm.define "promethgraf" do |promethgraf|
+    promethgraf.vm.box = 'centos/7'
+       
+    promethgraf.vm.host_name = 'promethgraf'
+    promethgraf.vm.network :private_network, 
+                       ip: "10.0.0.40", 
+                       virtualbox__intnet: 'internalnet'
+       
+    promethgraf.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      
+    end
+  end
 
   config.vm.define "backupserver" do |backupserver|
     backupserver.vm.box = 'centos/7'
@@ -76,19 +130,7 @@ Vagrant.configure("2") do |config|
     end
   end
   
-    config.vm.define "promethgraf" do |promethgraf|
-      promethgraf.vm.box = 'centos/7'
-         
-      promethgraf.vm.host_name = 'promethgraf'
-      promethgraf.vm.network :private_network, 
-                         ip: "10.0.0.40", 
-                         virtualbox__intnet: 'internalnet'
-         
-      promethgraf.vm.provider "virtualbox" do |vb|
-        vb.memory = "1024"
-        
-      end
-    end
+
 
   
   
