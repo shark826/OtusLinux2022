@@ -46,7 +46,7 @@
 
 apt-chacher  
 backup  
-drbd  
+drbd NFS  
 mysql  
 apache php WP  
 cerbot  

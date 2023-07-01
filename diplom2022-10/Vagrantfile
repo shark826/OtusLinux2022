@@ -71,12 +71,12 @@ Vagrant.configure("2") do |config|
        
     drbdnode.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
-        unless File.exist?('./storage/node12.vdi')
-               vb.customize ['createhd', '--filename', './storage/node12.vdi', '--variant', 'Fixed', '--size', 2176]
-               needsController = true
-        end
-          vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"]
-          vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './storage/node12.vdi']
+        # unless File.exist?('./storage/node12.vdi')
+        #        vb.customize ['createhd', '--filename', './storage/node12.vdi', '--variant', 'Fixed', '--size', 2176]
+        #        needsController = true
+        # end
+        #   vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"]
+        #   vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './storage/node12.vdi']
     end
     
   end
@@ -91,12 +91,12 @@ Vagrant.configure("2") do |config|
        
     drbdnode.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
-        unless File.exist?('./storage/node22.vdi')
-               vb.customize ['createhd', '--filename', './storage/node22.vdi', '--variant', 'Fixed', '--size', 2176]
-               needsController = true
-        end
-          vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"]
-          vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './storage/node22.vdi']
+        # unless File.exist?('./storage/node22.vdi')
+        #        vb.customize ['createhd', '--filename', './storage/node22.vdi', '--variant', 'Fixed', '--size', 2176]
+        #        needsController = true
+        # end
+        #   vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"]
+        #   vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './storage/node22.vdi']
     end
     
   end
