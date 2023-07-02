@@ -1,0 +1,27 @@
+---
+# tasks file for aptcaher
+- name: install apt-caher-ng
+  apt:
+    name: apt-cacher-ng
+    state: present
+  when: ansible_hostname == "frontserver"
+
+
+
+- name: copy 00aptproxy tamplate
+  template:
+    src: 00aptproxy.j2
+    dest: /etc/apt/apt.conf.d/00aptproxy
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_os_family == "Debian"
+
+- name: copy yum.conf tamplate
+  template:
+    src: yum.conf.j2
+    dest: /etc/yum.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_os_family == "RedHat"

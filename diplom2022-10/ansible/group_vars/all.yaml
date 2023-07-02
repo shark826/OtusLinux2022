@@ -1,4 +1,11 @@
 ---
+#####
+# apt-caher
+####
+aptserver: "http://10.0.0.10:3142"
+#####
+# mysql
+#####
 mysql_db: wordpres
 mysql_user: wpuser
 mysql_password: 'Pa!!1234'
