@@ -50,7 +50,7 @@
 - сгенерирован ssh-key и разослан на сервера  ```ssh-copy-id -i path/to/key.pub username@remoteHost```
 - ansible ping с результатом ОК ```ansible -i hosts -m ping```
 
-Порядок выполненя ролей:  
+Порядок выполнения ролей:  
 
 apt-chacher  
 backup  
