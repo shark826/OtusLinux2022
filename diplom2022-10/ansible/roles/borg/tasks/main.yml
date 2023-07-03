@@ -1,0 +1,58 @@
+---
+# tasks file for borg
+# - name: install epel
+#   ansible.builtin.yum:
+#     name:
+#       - epel-release      
+#     state: latest
+
+- name: install borg-backup
+  ansible.builtin.yum:
+    name:
+      - borgbackup      
+    state: latest
+
+# - name: Add the user 'borg'
+#   ansible.builtin.user:
+#     name: borg
+#     home: '/home/borg'
+#   when: (ansible_hostname == "backup")
+
+
+- name: mkdir .ssh
+  file:
+    path: ~/.ssh
+    state: directory
+    # owner: borg
+    # group: borg
+    mode: '0700'
+
+
+- name: copy ssh-key
+  copy:
+    src: borg
+    dest: ~/.ssh/id_rsa
+    # owner: borg
+    # group: borg
+    mode: '0600'
+
+- name: init borg repo for front
+  command: borg init -e none borg@10.0.0.50:front_repo
+  when: (ansible_hostname == "frontserver")
+
+- name: init borg repo for mysql
+  command: borg init -e none borg@10.0.0.50:mysql_repo
+  when: (ansible_hostname == "mysqlservernode2")
+
+- name: init borg repo for drbd
+  command: borg init -e none borg@10.0.0.50:drbd_repo
+  when: (ansible_hostname == "drbdnode1")
+
+  # when: (ansible_hostname == "client1") or
+  #       (ansible_hostname == "client2") or
+  #       (ansible_hostname == "client3")
+
+
+   
+    # borg create -C zstd borg@203.0.113.112:my_repo::example-`date +%Y%m%d_%H%M%S` /var/www/example.com
+    

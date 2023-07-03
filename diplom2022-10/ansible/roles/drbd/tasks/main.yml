@@ -1,0 +1,75 @@
+---
+- name: Enable EPEL Repository on CentOS 7
+  yum:
+    name: epel-release
+    state: latest
+  
+
+- name: Prepare elrepo
+  command: rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
+- name: Prepare elrepo 2
+  command: rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+
+- name: Iinstall packages DRBD
+  ansible.builtin.yum:
+    name:
+      - iptables
+      - kmod-drbd84
+      - drbd84-utils
+    state: latest
+  when: ansible_os_family == "RedHat"
+  
+- name: bakup global_common config 
+  copy:
+    src: /etc/drbd.d/global_common.conf
+    dest: /etc/drbd.d/global_common.conf.00
+    remote_src: yes
+
+
+- name: copy global_common config 
+  copy:
+    src: global_common.conf
+    dest: /etc/drbd.d/global_common.conf
+
+- name: copy Resource Otus
+  copy:
+    src: otus.res
+    dest: /etc/drbd.d/otus.res
+  
+
+- name: create 'otus' replicated block device is created
+  command: drbdadm create-md otus
+
+
+# - name: start drbd sevice
+#   service:
+#     name: drbd
+#     state: restarted
+
+- name: up otus
+  command: drbdadm up otus
+
+
+- name: set primary
+  command: drbdadm primary --force otus
+  when: (ansible_hostname == "node1")  
+  
+- name: mkfs ext4
+  command: mkfs -t ext4 /dev/drbd0
+  when: (ansible_hostname == "node1")  
+  
+- name: Create a directory for shared
+  file:
+    path: /mnt/otus
+    state: directory
+    mode: '0777'
+  
+- name: Mount up device by label
+  ansible.posix.mount:
+    path: /mnt/otus
+    src: /dev/drbd0
+    fstype: ext4
+    state: present
+
+...

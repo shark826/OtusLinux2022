@@ -2,11 +2,11 @@
 # tasks file for updateos
 
 # Upgrade RHEL family OS packages
-  - name: Enable EPEL Repository on CentOS 7
-    yum:
-      name: epel-release
-      state: latest
-    when: ansible_os_family == "RedHat"
+  # - name: Enable EPEL Repository on CentOS 7
+  #   yum:
+  #     name: epel-release
+  #     state: latest
+  #   when: ansible_os_family == "RedHat"
       
   - name: Upgrade RHEL Family OS packages
     yum:

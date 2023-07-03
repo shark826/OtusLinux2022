@@ -1,0 +1,63 @@
+---
+# tasks file for nfsutils
+- name: Install nfs-utils Centos
+  yum:
+    name: nfs-utils
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Iinstall packages DRBD
+  ansible.builtin.apt:
+    name:
+      - nfs-common
+    state: latest
+  when: ansible_os_family == "Debian"
+
+  
+- name: Enable nfs
+  service:
+    name: nfs
+    state: started
+    enabled: yes
+  when: ansible_os_family == "RedHat"  
+
+- name: Enable nfs-common
+  service:
+    name: nfs-common
+    state: started
+    enabled: yes
+  when: ansible_os_family == "Debian"  
+  
+    
+- name: Create Exports NFS on NODE1
+  shell: |
+    cat <<EOF > /etc/exports
+    /mnt/otus 192.168.56.0/24(rw,sync,root_squash)
+    EOF
+  when: (ansible_hostname == "node1")
+
+- name: Enable nfs
+  service:
+    name: nfs
+    state: restarted
+    enabled: yes
+  when: ansible_os_family == "RedHat"  
+  
+- name: Create a directory for shared
+  file:
+    path: /mnt/otus
+    state: directory
+    mode: '0777'
+  when: (ansible_hostname == "front")
+  
+- name: Insert into fstab mount point on FRONT
+  shell: |
+    echo "192.168.56.150:/mnt/otus/ /mnt/otus nfs vers=3,proto=udp,noauto,x-systemd.automount 0 0" >> /etc/fstab
+  when: (ansible_hostname == "front")
+- name: Daemon reload
+  shell: "systemctl daemon-reload"
+  when: (ansible_hostname == "front")
+
+- name: Restart remotefs
+  shell: "systemctl restart remote-fs.target"
+  when: (ansible_hostname == "front")

@@ -7,6 +7,20 @@
     - updateos
   tags: aptcacher  
 
+- name: Install Borg server
+  hosts: backupserver
+  become: true
+  roles:
+    - borgserver    
+  tags: borgserver
+
+- name: Install Borg client
+  hosts: frontserver, drbdnode1, mysqlservernode2
+  become: true
+  roles:
+    - borg 
+  tags: borgclient
+
 - name: Install MySQL Master
   hosts: mysqlservernode1
   become: true

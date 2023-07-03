@@ -1,0 +1,47 @@
+---
+# tasks file for borg
+# - name: install epel
+#   ansible.builtin.yum:
+#     name:
+#       - epel-release      
+#     state: latest
+
+- name: install borg-backup
+  ansible.builtin.yum:
+    name:
+      - borgbackup
+    state: latest
+
+
+- name: Add the user 'borg'
+  ansible.builtin.user:
+    name: borg
+    home: '/home/borg'
+  when: (ansible_hostname == "backupserver")
+
+
+- name: mkdir .ssh
+  file:
+    path: /home/borg/.ssh
+    state: directory
+    owner: borg
+    group: borg
+    mode: '0700'
+
+
+- name: copy pub.key
+  copy:
+    src: borg.pub
+    dest: /home/borg/.ssh/authorized_keys
+    owner: borg
+    group: borg
+    mode: '0600'
+
+- name: change mode 0755
+  file:
+    path: /home/borg
+    state: directory
+    recurse: no
+    owner: borg
+    group: borg
+    mode: '0755'
