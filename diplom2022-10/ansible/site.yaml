@@ -26,12 +26,14 @@
   become: true
   roles:
     - mysqlmaster
+  tags: mysqlmaster
 
 - name: Install MySQL Slave
   hosts: mysqlservernode2
   become: true
   roles:
     - mysqlslave
+  tags: mysqlslave
 
 - name: Install Apache+WP
   hosts: frontserver

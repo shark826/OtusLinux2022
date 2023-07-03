@@ -7,10 +7,18 @@
 #     state: latest
 
 - name: install borg-backup
+  ansible.builtin.apt:
+    name:
+      - borgbackup      
+    state: latest
+  when: ansible_os_family == "Debian"
+
+- name: install borg-backup
   ansible.builtin.yum:
     name:
       - borgbackup      
     state: latest
+  when: ansible_os_family == "RedHat"
 
 # - name: Add the user 'borg'
 #   ansible.builtin.user:
@@ -36,6 +44,19 @@
     # group: borg
     mode: '0600'
 
+- name: copy ssh-config
+  copy:
+    src: sshconfig
+    dest: ~/.ssh/config
+    # owner: borg
+    # group: borg
+    mode: '0400'
+
+- name: Stop and Start ssh
+  service:
+    name: sshd
+    state: restarted
+
 - name: init borg repo for front
   command: borg init -e none borg@10.0.0.50:front_repo
   when: (ansible_hostname == "frontserver")
@@ -54,5 +75,28 @@
 
 
    
-    # borg create -C zstd borg@203.0.113.112:my_repo::example-`date +%Y%m%d_%H%M%S` /var/www/example.com
+    # borg create -C zstd borg@10.0.0.50:front_repo::front-etc-`date +%Y%m%d_%H%M%S` /etc
     
+- name: copy cron front
+  copy:
+    src: cron_borg_front.sh
+    dest: /root/cron_borg_front.sh
+    # owner: borg
+    # group: borg
+    mode: 'a+x'
+
+- name: crontab borg repo for front
+  command: echo  '0 */3 * * * root /root/cron_borg_front.sh' >> /etc/crontab
+  when: (ansible_hostname == "frontserver")
+
+- name: copy cron mysql
+  copy:
+    src: cron_borg_mysql.sh
+    dest: /root/cron_borg_mysql.sh
+    # owner: borg
+    # group: borg
+    mode: 'a+x'
+
+- name: crontab borg repo for mysql
+  command: echo  '0 */3 * * * root /root/cron_borg_mysql.sh' >> /etc/crontab
+  when: (ansible_hostname == "mysqlservernode2")
