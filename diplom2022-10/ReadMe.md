@@ -48,7 +48,7 @@
 - все сервера с установленной ОС минимальной конфигурации (поставили ОС и первый запуск). 
 - на ПК админа установлен свежий ansible.
 - сгенерирован ssh-key и разослан на сервера  ```ssh-copy-id -i path/to/key.pub username@remoteHost```
-- ansible ping с результатом ОК ```ansible -i hosts -m ping```
+- ansible ping с результатом SUCCESS "ping": "pong" ```ansible all -i hosts -m ping```
 
 Порядок выполнения ролей:  
 

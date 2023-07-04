@@ -100,3 +100,16 @@
 - name: crontab borg repo for mysql
   command: echo  '0 */3 * * * root /root/cron_borg_mysql.sh' >> /etc/crontab
   when: (ansible_hostname == "mysqlservernode2")
+
+
+- name: copy cron drbd
+  copy:
+    src: cron_borg_drbd.sh
+    dest: /root/cron_borg_drbd.sh
+    # owner: borg
+    # group: borg
+    mode: 'a+x'
+
+- name: crontab borg repo for drbd
+  command: echo  '0 */6 * * * root /root/cron_borg_drbd.sh' >> /etc/crontab
+  when: (ansible_hostname == "drbdnode1")
