@@ -23,7 +23,7 @@
       protocol: tcp
       jump: ACCEPT
       destination_port: "{{ item }}"
-    loop: [ '22','53','80','443','3306', '7789', '9090', '9093', '9094', '9100' ]
+    loop: [ '22','53','80','443','3000','3306', '7789', '9090', '9093', '9094', '9100' ]
 
   - name: Allow UDP Ports
     iptables:
@@ -33,7 +33,7 @@
       protocol: udp
       jump: ACCEPT
       destination_port: "{{ item }}"
-    loop: [ '22','53','80','443','3306', '7789', '9090', '9093', '9094', '9100' ]
+    loop: [ '22','53','80','443','3000','3306', '7789', '9090', '9093', '9094', '9100' ]
 
   - name: Allow UDP Ports
     iptables:

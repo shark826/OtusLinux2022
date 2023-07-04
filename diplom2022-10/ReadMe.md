@@ -58,4 +58,4 @@ drbd NFS
 mysql  
 apache php WP  
 cerbot  
-prometheus graphana node-exporter  
+prometheus grafana node-exporter  
