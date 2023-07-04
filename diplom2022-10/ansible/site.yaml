@@ -21,6 +21,20 @@
     - borg 
   tags: borgclient
 
+- name: Install DRBD for Replicate Storage
+  hosts: drbdnode1, drbdnode2
+  become: true
+  roles:
+    - drbd
+  tags: drbd
+
+- name: Install NFS Utils
+  hosts: drbdnode1, frontserver
+  become: true
+  roles:
+    - nfsutils
+  tags: nfsutils
+
 - name: Install MySQL Master
   hosts: mysqlservernode1
   become: true

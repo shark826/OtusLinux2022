@@ -1,8 +1,8 @@
 ---
-- name: Enable EPEL Repository on CentOS 7
-  yum:
-    name: epel-release
-    state: latest
+# - name: Enable EPEL Repository on CentOS 7
+#   yum:
+#     name: epel-release
+#     state: latest
   
 
 - name: Prepare elrepo
@@ -14,7 +14,6 @@
 - name: Iinstall packages DRBD
   ansible.builtin.yum:
     name:
-      - iptables
       - kmod-drbd84
       - drbd84-utils
     state: latest
@@ -53,23 +52,24 @@
 
 - name: set primary
   command: drbdadm primary --force otus
-  when: (ansible_hostname == "node1")  
+  when: (ansible_hostname == "drbdnode1")  
   
 - name: mkfs ext4
   command: mkfs -t ext4 /dev/drbd0
-  when: (ansible_hostname == "node1")  
+  when: (ansible_hostname == "drbdnode1")  
   
 - name: Create a directory for shared
   file:
     path: /mnt/otus
     state: directory
     mode: '0777'
-  
+  when: (ansible_hostname == "drbdnode1")  
+
 - name: Mount up device by label
-  ansible.posix.mount:
+  mount:
     path: /mnt/otus
     src: /dev/drbd0
     fstype: ext4
     state: present
-
+  when: (ansible_hostname == "drbdnode1")  
 ...

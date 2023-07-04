@@ -32,9 +32,9 @@
 - name: Create Exports NFS on NODE1
   shell: |
     cat <<EOF > /etc/exports
-    /mnt/otus 192.168.56.0/24(rw,sync,root_squash)
+    /mnt/otus 10.0.0.30/24(rw,sync,root_squash)
     EOF
-  when: (ansible_hostname == "node1")
+  when: (ansible_hostname == "drbdnode1")
 
 - name: Enable nfs
   service:
@@ -43,21 +43,23 @@
     enabled: yes
   when: ansible_os_family == "RedHat"  
   
+  
+- name: Insert into fstab mount point on FRONT
+  shell: |
+    echo "10.0.0.30:/mnt/otus/ /var/www/html nfs vers=3,proto=udp,noauto,x-systemd.automount 0 0" >> /etc/fstab
+  when: (ansible_hostname == "frontserver")
+
+- name: Daemon reload
+  shell: "systemctl daemon-reload"
+  when: (ansible_hostname == "frontserver")
+
+- name: Restart remotefs
+  shell: "systemctl restart remote-fs.target"
+  when: (ansible_hostname == "frontserver")
+
 - name: Create a directory for shared
   file:
     path: /mnt/otus
     state: directory
     mode: '0777'
-  when: (ansible_hostname == "front")
-  
-- name: Insert into fstab mount point on FRONT
-  shell: |
-    echo "192.168.56.150:/mnt/otus/ /mnt/otus nfs vers=3,proto=udp,noauto,x-systemd.automount 0 0" >> /etc/fstab
-  when: (ansible_hostname == "front")
-- name: Daemon reload
-  shell: "systemctl daemon-reload"
-  when: (ansible_hostname == "front")
-
-- name: Restart remotefs
-  shell: "systemctl restart remote-fs.target"
-  when: (ansible_hostname == "front")
+  when: (ansible_hostname == "frontserver")
