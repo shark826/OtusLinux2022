@@ -1,0 +1,14 @@
+55  yum install wget -y
+   56  cd /tmp
+   57  wget https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
+   58  tar -zxf node_exporter-1.6.0.linux-amd64.tar.gz
+   59  cd /tmp/node_exporter-1.6.0.linux-amd64/
+   60  cp node_exporter /usr/local/bin/
+   61  useradd --no-create-home --shell /bin/false nodeusr
+   62  chown -R nodeusr:nodeusr /usr/local/bin/node_exporter
+   63  vi /etc/systemd/system/node_exporter.service
+   64  systemctl daemon-reload
+   65  systemctl enable node_exporter
+   66  systemctl start node_exporter
+   67  systemctl status node_exporter
+   68  vi /etc/systemd/system/node_exporter.service

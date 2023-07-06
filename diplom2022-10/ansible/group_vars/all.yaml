@@ -15,6 +15,7 @@ mysql_root_password: 'RootPa!!23'
 http_host: "default-ssl"
 http_conf: "default-ssl.conf"
 http_port: "80"
+nginx_port: "8080"
 
 #############################################
 # variables for node_exporter
