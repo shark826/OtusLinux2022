@@ -90,3 +90,26 @@ git https://github.com/tomzo/docker-kernel-ide
 
 
 
+
+Example  docker-compose.yml
+
+```code
+---
+version: "3.1"
+
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    container_name: dashy
+    volumes:
+      - /home/roman/dashy:/app/public
+#      - /home/proxy12/dashy/item-icons:/app/public/item-icons/
+    ports:
+      - 8090:80
+    restart: unless-stopped
+
+```
+
+
+
+
